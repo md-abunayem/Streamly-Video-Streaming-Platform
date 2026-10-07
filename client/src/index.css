@@ -1,1 +1,76 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+	--color-page: var(--page);
+	--color-surface: var(--surface);
+	--color-surface-raised: var(--surface-raised);
+	--color-surface-sunken: var(--surface-sunken);
+	--color-text-primary: var(--text-primary);
+	--color-text-muted: var(--text-muted);
+	--color-border: var(--border);
+	--color-accent: var(--accent);
+	--color-accent-hover: var(--accent-hover);
+	--color-accent-soft: var(--accent-soft);
+	--color-accent-contrast: var(--accent-contrast);
+	--color-highlight: var(--highlight);
+	--shadow-soft: var(--shadow-soft-value);
+	--shadow-raised: var(--shadow-raised-value);
+}
+
+:root {
+	color-scheme: light;
+	--page: #f3f5f1;
+	--surface: #ffffff;
+	--surface-raised: #edf1eb;
+	--surface-sunken: #e5eae4;
+	--text-primary: #1b2925;
+	--text-muted: #68766f;
+	--border: #dce3dc;
+	--accent: #08756b;
+	--accent-hover: #075d56;
+	--accent-soft: #e3f1ed;
+	--accent-contrast: #ffffff;
+	--highlight: #b47a43;
+	--shadow-soft-value: 0 10px 30px rgb(31 48 40 / 7%);
+	--shadow-raised-value: 0 18px 45px rgb(31 48 40 / 11%);
+}
+
+:root.dark {
+	color-scheme: dark;
+	--page: #101b1c;
+	--surface: #172526;
+	--surface-raised: #203536;
+	--surface-sunken: #0c1516;
+	--text-primary: #edf5f3;
+	--text-muted: #a6bab6;
+	--border: #344a49;
+	--accent: #58c5b6;
+	--accent-hover: #7dd7ca;
+	--accent-soft: #173a37;
+	--accent-contrast: #10211f;
+	--highlight: #d8a36c;
+	--shadow-soft-value: 0 10px 30px rgb(0 0 0 / 14%);
+	--shadow-raised-value: 0 18px 45px rgb(0 0 0 / 24%);
+}
+
+@layer base {
+	html {
+		@apply bg-page scroll-smooth;
+	}
+
+	body {
+		@apply m-0 min-w-0 bg-page text-text-primary antialiased transition-colors duration-200;
+		font-synthesis: none;
+		text-rendering: optimizeLegibility;
+	}
+
+	::selection {
+		@apply bg-accent-soft text-text-primary;
+	}
+
+	:focus-visible {
+		@apply outline-2 outline-offset-2 outline-accent;
+	}
+}

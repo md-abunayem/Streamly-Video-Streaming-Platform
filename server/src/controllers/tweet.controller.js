@@ -3,6 +3,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { Tweet } from "../models/tweet.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import mongoose, { isValidObjectId } from "mongoose";
+import { Subscription } from "../models/subscription.model.js";
+import { createNotifications } from "../utils/notificationHelpers.js";
 
 // Create a new tweet
 const createTweet = asyncHandler(async (req, res) => {
@@ -25,6 +27,18 @@ const createTweet = asyncHandler(async (req, res) => {
     content,
     owner: ownerId,
   });
+
+  const subscriberRecords = await Subscription.find({
+    channel: ownerId,
+  }).select("subscriber");
+  await createNotifications(
+    subscriberRecords.map(({ subscriber }) => ({
+      recipient: subscriber,
+      actor: ownerId,
+      type: "new_tweet",
+      tweet: tweet._id,
+    }))
+  );
 
   // tweet.save();  //no need to call save() when using create()
 

@@ -3,9 +3,9 @@ import axios from "axios";
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const apiClient = axios.create({
-    baseURL: `${API_BASE_URL}`,
-    timeout: 30000,
-    withCredentials: true
+  baseURL: `${API_BASE_URL}`,
+  timeout: 30000,
+  withCredentials: true,
 });
 
 // Request interceptor: attach access token from localStorage
@@ -19,16 +19,16 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Refresh token function
 const refreshAccessToken = async () => {
   try {
     const response = await axios.post(
-      `${API_BASE_URL}/users/refresh-token`,
+      `${API_BASE_URL}/users/refresh-access-token`,
       {},
-      { withCredentials: true }
+      { withCredentials: true },
     );
 
     const { accessToken, refreshToken } = response.data.data;
@@ -61,10 +61,10 @@ apiClient.interceptors.response.use(
 
       try {
         const newAccessToken = await refreshAccessToken();
-        
+
         // Update the failed request with new token
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        
+
         // Retry the original request
         return apiClient(originalRequest);
       } catch (refreshError) {
@@ -73,7 +73,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default apiClient;

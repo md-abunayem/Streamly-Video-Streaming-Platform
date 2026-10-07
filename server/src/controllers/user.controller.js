@@ -226,8 +226,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     };
 
     //new access token
-    const { accessToken, refreshToken } =
-      await generateAccessAndRefreshToken(user._id);
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+      user._id
+    );
 
     res
       .status(200)
@@ -511,16 +512,10 @@ const getWatchHistory = asyncHandler(async (req, res) => {
                     avatar: 1,
                   },
                 },
-                {
-                  $addFields: {
-                    owner: {
-                      $first: "$owner", // simplify owner array to single object
-                    },
-                  },
-                },
               ],
             },
           },
+          { $unwind: { path: "$owner", preserveNullAndEmptyArrays: true } },
         ],
       },
     },
@@ -531,7 +526,7 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(
         200,
-        user[0].watchHistory,
+        user[0]?.watchHistory || [],
         "Watch history data fetch successfully"
       )
     );

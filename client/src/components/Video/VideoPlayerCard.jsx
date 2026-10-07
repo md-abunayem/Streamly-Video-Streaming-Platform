@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { ThumbsUp, Forward, Download } from "lucide-react";
@@ -8,15 +8,21 @@ import {
   toggleSubscription,
   getUserChannelSubscribers,
 } from "../../redux/slices/SubscriptionSlice";
+import { toggleVideoLike } from "../../redux/slices/likeSlice";
 
 const VideoPlayerCard = () => {
   const dispatch = useDispatch();
   const { selectedVideo, errorMessage } = useSelector((state) => state.video);
   const { subscribers } = useSelector((state) => state.subscription);
   const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const [isLiked, setIsLiked] = useState(false);
 
   const { videoFile, thumbnail, title, description, owner, ownerDetails } =
     selectedVideo || {};
+
+  useEffect(() => {
+    setIsLiked(Boolean(selectedVideo?.isLiked));
+  }, [selectedVideo?._id]);
 
   // Handle errors
   useEffect(() => {
@@ -25,8 +31,8 @@ const VideoPlayerCard = () => {
 
   // Fetch channel subscribers when video owner changes
   useEffect(() => {
-    if (owner) dispatch(getUserChannelSubscribers(owner));
-  }, [owner, dispatch]);
+    if (owner && isAuthenticated) dispatch(getUserChannelSubscribers(owner));
+  }, [owner, isAuthenticated, dispatch]);
 
   // Check if the current user is subscribed
   const isSubscribed =
@@ -49,7 +55,11 @@ const VideoPlayerCard = () => {
       toast.info("Please login to like this video");
       return;
     }
-    toast.success("You liked this video! 👍");
+    if (!selectedVideo?._id) return;
+    dispatch(toggleVideoLike(selectedVideo._id))
+      .unwrap()
+      .then((result) => setIsLiked(Boolean(result?.isLiked)))
+      .catch((error) => toast.error(error));
   };
 
   const handleShare = () => {
@@ -74,7 +84,7 @@ const VideoPlayerCard = () => {
   };
 
   return (
-    <div className="px-3 py-3 sm:px-4 sm:py-4 md:px-6 md:py-4 lg:px-8 lg:py-4 xl:px-12 flex flex-col text-white">
+    <div className="flex flex-col px-3 py-3 text-[var(--text-primary)] sm:px-4 sm:py-4 md:px-6 md:py-4 lg:px-8 lg:py-4 xl:px-12">
       {/* Video Player */}
       {videoFile ? (
         <video
@@ -85,8 +95,8 @@ const VideoPlayerCard = () => {
           className="w-full aspect-video max-h-[50vh] sm:max-h-[55vh] md:max-h-[60vh] lg:max-h-[68vh] xl:max-h-[71vh] rounded-lg md:rounded-xl lg:rounded-2xl object-cover"
         />
       ) : (
-        <div className="w-full aspect-video bg-gray-800 rounded-lg md:rounded-xl lg:rounded-2xl flex items-center justify-center">
-          <p className="text-gray-400 text-sm sm:text-base md:text-lg">
+        <div className="flex aspect-video w-full items-center justify-center rounded-lg bg-surface-sunken md:rounded-xl lg:rounded-2xl">
+          <p className="text-sm text-text-muted sm:text-base md:text-lg">
             No video selected
           </p>
         </div>
@@ -115,17 +125,19 @@ const VideoPlayerCard = () => {
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold truncate">
                 {ownerDetails?.fullName || "Unknown Creator"}
               </p>
-              <p className="text-xs sm:text-sm md:text-base text-gray-400 font-medium">
-                {calculateSubscribers(subscribers?.length)}
-              </p>
+              {isAuthenticated && (
+                <p className="text-xs font-medium text-text-muted sm:text-sm md:text-base">
+                  {calculateSubscribers(subscribers?.length)}
+                </p>
+              )}
             </div>
 
             {/* Subscribe Button - Desktop */}
             <button
               onClick={handleToggleSubscribe}
-              className="hidden sm:flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-black font-semibold px-4 md:px-5 lg:px-6 h-9 md:h-10 rounded-full transition-colors text-sm md:text-base whitespace-nowrap"
+              className="hidden h-9 items-center justify-center rounded-full border border-border bg-surface-raised px-4 text-sm font-semibold text-text-primary transition-colors hover:bg-accent-soft sm:flex md:h-10 md:px-5 md:text-base lg:px-6"
             >
-              {isSubscribed ? "Unfollow" : "Follow"}
+              {isSubscribed ? "Unsubscribe" : "Subscribe"}
             </button>
           </div>
 
@@ -134,7 +146,7 @@ const VideoPlayerCard = () => {
             {/* Subscribe Button - Mobile */}
             <button
               onClick={handleToggleSubscribe}
-              className="sm:hidden flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-black font-semibold px-4 h-9 rounded-full transition-colors text-sm flex-1 min-w-[100px]"
+              className="flex h-9 min-w-[100px] flex-1 items-center justify-center rounded-full border border-border bg-surface-raised px-4 text-sm font-semibold text-text-primary transition-colors hover:bg-accent-soft sm:hidden"
             >
               {isSubscribed ? "Unfollow" : "Follow"}
             </button>
@@ -142,8 +154,9 @@ const VideoPlayerCard = () => {
             {/* Like Button */}
             <button
               onClick={handleLike}
-              className="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-black h-9 md:h-10 w-12 md:w-14 rounded-full transition-colors flex-shrink-0"
-              aria-label="Like video"
+              className={`flex h-9 w-12 flex-shrink-0 items-center justify-center rounded-full transition-colors md:h-10 md:w-14 ${isLiked ? "bg-accent text-accent-contrast" : "border border-border bg-surface-raised text-text-primary hover:bg-accent-soft"}`}
+              aria-label={isLiked ? "Unlike video" : "Like video"}
+              aria-pressed={isLiked}
             >
               <ThumbsUp className="w-4 h-4 md:w-5 md:h-5" />
             </button>
@@ -151,7 +164,7 @@ const VideoPlayerCard = () => {
             {/* Share Button */}
             <button
               onClick={handleShare}
-              className="flex items-center justify-center gap-1.5 bg-gray-200 hover:bg-gray-300 text-black font-semibold px-3 md:px-4 h-9 md:h-10 rounded-full transition-colors text-sm md:text-base whitespace-nowrap"
+              className="flex h-9 items-center justify-center gap-1.5 rounded-full border border-border bg-surface-raised px-3 text-sm font-semibold text-text-primary transition-colors hover:bg-accent-soft md:h-10 md:px-4 md:text-base"
             >
               <Forward className="w-4 h-4 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Share</span>
@@ -160,7 +173,7 @@ const VideoPlayerCard = () => {
             {/* Download Button */}
             <button
               onClick={handleDownload}
-              className="flex items-center justify-center gap-1.5 bg-gray-200 hover:bg-gray-300 text-black font-semibold px-3 md:px-4 lg:px-5 h-9 md:h-10 rounded-full transition-colors text-sm md:text-base whitespace-nowrap"
+              className="flex h-9 items-center justify-center gap-1.5 rounded-full border border-border bg-surface-raised px-3 text-sm font-semibold text-text-primary transition-colors hover:bg-accent-soft md:h-10 md:px-4 md:text-base lg:px-5"
             >
               <Download className="w-4 h-4 md:w-5 md:h-5" />
               <span className="hidden sm:inline">Download</span>
@@ -169,19 +182,18 @@ const VideoPlayerCard = () => {
         </div>
 
         {/* Video Description */}
-        <div className="relative border border-gray-700/60 bg-gray-900/70 backdrop-blur-md rounded-xl p-5 pt-7 shadow-lg shadow-gray-900/40 transition duration-300 hover:shadow-gray-800/70 mt-10">
+        <div className="relative mt-10 rounded-lg border border-border bg-surface p-5 pt-7 shadow-soft transition duration-300">
           {/* Title */}
           <span
             className="absolute top-0 left-[1.5%] -translate-y-1/2 
-               bg-gray-900 px-3 py-0.5 text-gray-200 text-sm sm:text-base 
-               font-semibold tracking-wide uppercase border border-gray-700/60 
+               border border-border bg-surface px-3 py-0.5 text-sm font-semibold uppercase text-text-muted sm:text-base 
                rounded-full shadow-sm"
           >
             Description
           </span>
 
           {/* Content */}
-          <p className="text-sm sm:text-base lg:text-lg text-gray-300/90 leading-relaxed whitespace-pre-wrap break-words">
+          <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-text-muted sm:text-base lg:text-lg">
             {description || "No description available."}
           </p>
         </div>

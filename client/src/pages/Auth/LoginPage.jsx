@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
-import { LogIn, User, Lock, EyeOff, Eye } from "lucide-react";
+import {
+  ArrowRight,
+  Clapperboard,
+  Eye,
+  EyeOff,
+  LockKeyhole,
+  Mail,
+  Play,
+  UserRound,
+} from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -10,6 +19,7 @@ import {
   clearSuccess,
 } from "../../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import "./AuthPages.css";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -63,112 +73,140 @@ const LoginPage = () => {
       : { userName: formData.identifier, password: formData.password };
 
     // dispatch(clearError());
+    dispatch(clearError());
     dispatch(loginUser(credential));
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-200">
-      <div className="sm:max-w-[50%] md:w-132 lg:w-152 mx-auto bg-white shadow-lg rounded-lg flex flex-col justify-center items-center pt-10">
-        <div className="flex flex-col items-center">
-          <div className="w-20 h-20 rounded-full bg-purple-700/80 flex justify-center items-center ">
-            <LogIn className="w-12 h-12 text-white" />
-          </div>
-          <p className="text-4xl text-black font-semibold mt-8">Welcome Back</p>
-          <p className="text-2xl text-gray-500 mt-1">Sign in to your account</p>
-        </div>
+    <main className="auth-shell">
+      <section className="auth-form-side">
+        <div className="auth-form-wrap">
+          <Link to="/" className="auth-brand" aria-label="Streamly home">
+            <span className="auth-brand-mark">
+              <Play size={17} fill="currentColor" />
+            </span>
+            <span className="auth-brand-name">streamly</span>
+          </Link>
 
-        {/* error message */}
-        {errorMessage && (
-          <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-sm text-red-800">{errorMessage}</p>
-          </div>
-        )}
+          <p className="auth-kicker">Your next watch starts here</p>
+          <h1 className="auth-title">Welcome back.</h1>
+          <p className="auth-subtitle">
+            Sign in to pick up where you left off and find something worth
+            sharing.
+          </p>
 
-        {/* form */}
-        <div className="w-full p-10">
-          <form
-            action=""
-            onSubmit={handleLogin}
-            className="flex flex-col items-start w-full"
-          >
-            {/* username or email field */}
-            <div className="w-full">
-              <label
-                htmlFor="identifier"
-                className="block text-sm font-semibold mb-2 text-gray-700 pt-2"
-              >
-                Username or Email*
+          {errorMessage && (
+            <div
+              role="alert"
+              className="mt-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+            >
+              {errorMessage}
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="auth-form">
+            <div>
+              <label htmlFor="identifier" className="auth-field-label">
+                Username or email
               </label>
-              <div className="flex border[border-width:0.5px] border-gray-300 rounded-sm py-2 focus-within:border-purple-500 focuse-within: ring-1 focus-within:ring-purple-500 transform">
-                <User className="text-gray-400 mx-2" />
+              <div className="auth-input-wrap">
+                {formData.identifier.includes("@") ? (
+                  <Mail
+                    className="auth-input-icon"
+                    size={18}
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <UserRound
+                    className="auth-input-icon"
+                    size={18}
+                    aria-hidden="true"
+                  />
+                )}
                 <input
                   type="text"
                   name="identifier"
                   id="identifier"
-                  className="outline-none w-full"
-                  placeholder="Enter username or email"
+                  className="auth-input"
+                  placeholder="you@example.com or username"
+                  autoComplete="username"
+                  autoCapitalize="none"
                   required
                   value={formData.identifier}
                   onChange={handleChange}
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1 ml-1">
-                You can use either your username or email address
-              </p>
             </div>
 
-            {/* password field */}
-            <div className="w-full">
-              <label
-                htmlFor="password"
-                className="block text-sm font-semibold mb-2 text-gray-700 pt-2"
-              >
-                Password*
+            <div>
+              <label htmlFor="password" className="auth-field-label">
+                Password
               </label>
-              <div className="flex border[border-width:0.5px] border-gray-300 rounded-sm py-2 focus-within:border-purple-500 focus-within: ring-1 focus-within:ring-purple-500 transform">
-                <Lock className="text-gray-400 mx-2" />
+              <div className="auth-input-wrap">
+                <LockKeyhole
+                  className="auth-input-icon"
+                  size={18}
+                  aria-hidden="true"
+                />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   id="password"
-                  className="outline-none w-full"
-                  placeholder="Enter password"
+                  className="auth-input"
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
                   required
                   value={formData.password}
                   onChange={handleChange}
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="pr-2 hover:bg-gray-100 rounded transition-colors"
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  className="auth-password-toggle"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5 text-gray-400" />
-                  ) : (
-                    <Eye className="w-5 h-5 text-gray-400" />
-                  )}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
+
             <button
               type="submit"
-              className="w-full bg-purple-700/70 text-white py-2 rounded-lg hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-500 mt-6"
+              className="auth-primary-button mt-2"
               disabled={isLoading}
             >
-              {isLoading ? "Logging in..." : "Login"}
+              {isLoading ? "Signing in..." : "Sign in"}
+              {!isLoading && <ArrowRight size={17} aria-hidden="true" />}
             </button>
           </form>
-          <p className="w-full text-center mt-8 text-gray-600 text-[1.2rem]">
-            Don't have an account?{" "}
-            <Link to="/register">
-              <span className="text-purple-700 font-bold text-[1.2rem]">
-                Sign Up
-              </span>
-            </Link>
+
+          <p className="auth-switch">
+            New to Streamly? <Link to="/register">Create an account</Link>
           </p>
         </div>
-      </div>
-    </div>
+      </section>
+
+      <aside
+        className="auth-visual"
+        aria-label="Streamly film-inspired artwork"
+      >
+        <div className="auth-visual-content">
+          <span className="auth-visual-caption">
+            <Clapperboard size={14} /> Stories worth staying for
+          </span>
+          <h2 className="auth-visual-title">
+            Find your
+            <br />
+            next favorite.
+          </h2>
+          <p className="auth-visual-copy">
+            A world of fresh perspectives, memorable moments, and creators to
+            come back to.
+          </p>
+          <p className="auth-footer-note">Good stories are better together.</p>
+        </div>
+      </aside>
+    </main>
   );
 };
 

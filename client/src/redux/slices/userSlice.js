@@ -20,10 +20,10 @@ export const fetchUserChannel = createAsyncThunk(
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Failed to fetch channel data.")
+        extractErrorMessage(error, "Failed to fetch channel data."),
       );
     }
-  }
+  },
 );
 
 //Fetch current user's watch history
@@ -36,10 +36,10 @@ export const fetchWatchHistory = createAsyncThunk(
       return response?.data?.data || [];
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Failed to fetch watch history.")
+        extractErrorMessage(error, "Failed to fetch watch history."),
       );
     }
-  }
+  },
 );
 
 const userSlice = createSlice({
@@ -82,6 +82,22 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.errorMessage = action.payload || "Failed to fetch user channel";
         state.successMessage = null;
+      });
+
+    builder
+      .addCase(fetchWatchHistory.pending, (state) => {
+        state.isLoading = true;
+        state.errorMessage = null;
+      })
+      .addCase(fetchWatchHistory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.watchHistory = Array.isArray(action.payload)
+          ? action.payload
+          : [];
+      })
+      .addCase(fetchWatchHistory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.errorMessage = action.payload || "Failed to fetch watch history";
       });
   },
 });

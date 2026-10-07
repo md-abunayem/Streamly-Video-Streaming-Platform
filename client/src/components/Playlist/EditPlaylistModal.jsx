@@ -15,7 +15,7 @@ const EditPlaylistModal = () => {
 
   const dispatch = useDispatch();
   const { selectedPlaylistId, playlist } = useSelector(
-    (state) => state.playlist
+    (state) => state.playlist,
   );
 
   // Populate form with current playlist data when modal opens
@@ -52,7 +52,7 @@ const EditPlaylistModal = () => {
         updatePlaylist({
           playlistId: selectedPlaylistId,
           updatedDetails,
-        })
+        }),
       ).unwrap();
 
       toast.success("Playlist updated successfully!");
@@ -65,15 +65,15 @@ const EditPlaylistModal = () => {
   return (
     // Backdrop covering the full screen
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
       onClick={() => dispatch(setIsEditPlaylistModalAppear(false))} // close when clicking outside
     >
       {/* Modal content */}
       <div
-        className="bg-gray-800 rounded-md p-6 w-[90%] max-w-[700px]"
+        className="w-full max-w-2xl rounded-lg border border-border bg-surface p-6 text-text-primary shadow-raised sm:p-8"
         onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
       >
-        <p className="text-2xl mb-6 font-semibold text-gray-300">
+        <p className="mb-6 text-2xl font-semibold text-text-primary">
           Update Playlist
         </p>
 
@@ -83,7 +83,7 @@ const EditPlaylistModal = () => {
           value={updatedDetails.name}
           onChange={handleChange}
           placeholder="Playlist Title"
-          className="w-full border border-gray-600 rounded-lg p-3 bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-400 outline-none"
+          className="w-full rounded-md border border-border bg-page p-3 text-text-primary outline-none placeholder:text-text-muted focus:border-accent focus:ring-2 focus:ring-accent/20"
         />
 
         <textarea
@@ -91,7 +91,7 @@ const EditPlaylistModal = () => {
           value={updatedDetails.description}
           onChange={handleChange}
           placeholder="Description"
-          className="w-full border border-gray-600 rounded-lg p-3 bg-gray-900 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-400 outline-none mt-4"
+          className="mt-4 w-full rounded-md border border-border bg-page p-3 text-text-primary outline-none placeholder:text-text-muted focus:border-accent focus:ring-2 focus:ring-accent/20"
           rows="4"
         />
 
@@ -99,14 +99,14 @@ const EditPlaylistModal = () => {
         <div className="mt-6 flex justify-end gap-4">
           <button
             onClick={() => dispatch(setIsEditPlaylistModalAppear(false))}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white font-semibold"
+            className="rounded-md border border-border bg-surface-raised px-4 py-2 font-semibold text-text-primary transition hover:bg-accent-soft"
           >
             Cancel
           </button>
 
           <button
             onClick={handleEdit}
-            className="px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded text-white font-semibold"
+            className="rounded-md bg-accent px-4 py-2 font-semibold text-accent-contrast transition hover:bg-accent-hover"
           >
             Update
           </button>

@@ -83,7 +83,9 @@ const CreateTweet = () => {
       dispatch(setIsCreateTweetAppear(false));
     } catch (error) {
       const msg =
-        typeof error === "string" ? error : error?.message || "Failed to create tweet";
+        typeof error === "string"
+          ? error
+          : error?.message || "Failed to create tweet";
       toast.error(msg);
     } finally {
       setSubmitting(false);
@@ -100,12 +102,15 @@ const CreateTweet = () => {
       onClick={closeCreateWindow} // click outside to close
     >
       {/* overlay */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        aria-hidden="true"
+      />
 
       {/* dialog panel */}
       <div
         ref={dialogRef}
-        className="relative z-10 w-[90%] lg:max-w-[600px] rounded-xl bg-gray-800 p-4 text-gray-100 shadow-xl ring-1 ring-white/10"
+        className="relative z-10 w-[90%] rounded-lg border border-border bg-surface p-5 text-text-primary shadow-raised sm:p-6 lg:max-w-[600px]"
         role="dialog"
         aria-modal="true"
         aria-labelledby="create-tweet-title"
@@ -119,7 +124,7 @@ const CreateTweet = () => {
           <button
             type="button"
             onClick={closeCreateWindow}
-            className="rounded-md p-2 text-gray-300 hover:bg-white/10 focus:outline-none focus-visible:ring focus-visible:ring-sky-500"
+            className="rounded-md p-2 text-text-muted transition hover:bg-surface-raised hover:text-text-primary"
             aria-label="Close"
             title="Close"
           >
@@ -141,13 +146,13 @@ const CreateTweet = () => {
             value={tweetInput}
             onChange={handleChange}
             maxLength={MAX}
-            className="w-full resize-y rounded-2xl border border-white/10 bg-gray-900 p-3 text-gray-100 placeholder-gray-400 outline-none focus:ring-2 focus:ring-sky-500"
+            className="w-full resize-y rounded-md border border-border bg-page p-3 text-text-primary outline-none placeholder:text-text-muted focus:border-accent focus:ring-2 focus:ring-accent/20"
             placeholder="Write here..."
           />
 
           <div className="mt-4 flex items-center justify-between">
             <span
-              className={`text-xs ${remaining <= 20 ? "text-red-400" : "text-gray-400"}`}
+              className={`text-xs ${remaining <= 20 ? "text-red-600" : "text-text-muted"}`}
               aria-live="polite"
             >
               {remaining} characters left
@@ -156,7 +161,7 @@ const CreateTweet = () => {
             <div className="space-x-3">
               <button
                 type="button"
-                className="rounded-2xl bg-gray-700 px-4 py-2 font-semibold hover:bg-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-sky-500"
+                className="rounded-md border border-border bg-surface-raised px-4 py-2 font-semibold text-text-primary transition hover:bg-accent-soft"
                 onClick={closeCreateWindow}
               >
                 Cancel
@@ -164,7 +169,7 @@ const CreateTweet = () => {
               <button
                 type="submit"
                 disabled={submitting || tweetInput.trim().length === 0}
-                className="rounded-2xl bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50 focus:outline-none focus-visible:ring focus-visible:ring-sky-500"
+                className="rounded-md bg-accent px-4 py-2 font-semibold text-accent-contrast transition hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {submitting ? "Posting…" : "Create"}
               </button>

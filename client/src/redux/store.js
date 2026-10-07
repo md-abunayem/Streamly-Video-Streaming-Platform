@@ -10,6 +10,7 @@ import commentReducer from "./slices/commentSlice";
 import dashboardReducer from "./slices/dashboardSlice";
 import healthcheckReducer from "./slices/healthcheckSlice";
 import pageApearReducer from "./slices/pageAppear";
+import notificationReducer from "./slices/notificationSlice";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     dashboard: dashboardReducer,
     healthcheck: healthcheckReducer,
     pageAppear: pageApearReducer,
+    notifications: notificationReducer,
   },
 });
 

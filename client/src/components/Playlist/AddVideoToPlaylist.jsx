@@ -11,7 +11,7 @@ const AddVideoToPlaylist = () => {
 
   // previous logic (playlist created)
   const { playlist, selectedPlaylistId } = useSelector(
-    (state) => state.playlist
+    (state) => state.playlist,
   );
 
   const [selectedVideos, setSelectedVideos] = useState([]);
@@ -32,7 +32,7 @@ const AddVideoToPlaylist = () => {
     setSelectedVideos((prev) =>
       prev.includes(videoId)
         ? prev.filter((id) => id !== videoId)
-        : [...prev, videoId]
+        : [...prev, videoId],
     );
   };
 
@@ -51,9 +51,9 @@ const AddVideoToPlaylist = () => {
             addVideoToPlaylist({
               videoId,
               playlistId: finalPlaylistId, // merged final id
-            })
-          )
-        )
+            }),
+          ),
+        ),
       );
 
       dispatch(setAddVidoeToPlaylistAppear(false));
@@ -66,18 +66,16 @@ const AddVideoToPlaylist = () => {
   return (
     <div
       role="dialog"
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
     >
-      <div className="bg-gray-800 rounded-lg p-6 w-[90%] max-w-[700px]">
-        <h2 className="text-xl font-semibold text-white mb-4">
-          Add to Playlist
-        </h2>
+      <div className="w-full max-w-2xl rounded-lg border border-border bg-surface p-6 text-text-primary shadow-raised">
+        <h2 className="mb-4 text-xl font-semibold">Add to Playlist</h2>
 
         <div className="max-h-[400px] overflow-y-auto flex flex-col gap-3">
           {videos?.map((video) => (
             <div
               key={video._id}
-              className="flex items-center justify-between p-2 hover:bg-gray-700 rounded cursor-pointer"
+              className="flex cursor-pointer items-center justify-between rounded-md p-2 transition hover:bg-surface-raised"
             >
               <video
                 src={video.videoFile}
@@ -85,14 +83,14 @@ const AddVideoToPlaylist = () => {
               ></video>
 
               <div className="ml-4 flex-1">
-                <p className="text-white font-medium">{video.title}</p>
+                <p className="font-medium text-text-primary">{video.title}</p>
               </div>
 
               <input
                 type="checkbox"
                 checked={selectedVideos.includes(video._id)}
                 onChange={() => toggleVideos(video._id)}
-                className="w-5 h-5 accent-pink-500"
+                className="h-5 w-5 accent-accent"
               />
             </div>
           ))}
@@ -100,14 +98,14 @@ const AddVideoToPlaylist = () => {
 
         <div className="mt-4 flex justify-end gap-2">
           <button
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white"
+            className="rounded-md border border-border bg-surface-raised px-4 py-2 text-text-primary transition hover:bg-accent-soft"
             onClick={() => dispatch(setAddVidoeToPlaylistAppear(false))}
           >
             Cancel
           </button>
 
           <button
-            className="px-4 py-2 bg-pink-500 hover:bg-pink-600 rounded text-white"
+            className="rounded-md bg-accent px-4 py-2 font-semibold text-accent-contrast transition hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
             onClick={handleAdd}
             disabled={selectedVideos.length === 0}
           >

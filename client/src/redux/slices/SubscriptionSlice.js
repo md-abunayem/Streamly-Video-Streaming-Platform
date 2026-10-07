@@ -17,16 +17,16 @@ export const getUserChannelSubscribers = createAsyncThunk(
   async (channelId, { rejectWithValue }) => {
     try {
       const response = await apiClient.get(
-        `/subscriptions/channel/${channelId}/subscribers`
+        `/subscriptions/channel/${channelId}/subscribers`,
       );
 
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Failed to fetch channel subscribers.")
+        extractErrorMessage(error, "Failed to fetch channel subscribers."),
       );
     }
-  }
+  },
 );
 
 //Toggle Subscription
@@ -36,34 +36,34 @@ export const toggleSubscription = createAsyncThunk(
     try {
       const response = await apiClient.post(
         `/subscriptions/channel/${channelId}/toggle`,
-        { channelId }
+        { channelId },
       );
 
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Failed to toggle subscription.")
+        extractErrorMessage(error, "Failed to toggle subscription."),
       );
     }
-  }
+  },
 );
 
 //Subscribed channels of a user
-const getSubscribedChannel = createAsyncThunk(
+export const getSubscribedChannel = createAsyncThunk(
   "subscription/getSubscribedChannels",
   async (userId, { rejectWithValue }) => {
     try {
       const response = await apiClient.get(
-        `/subscriptions/user/${userId}/channels`
+        `/subscriptions/user/${userId}/channels`,
       );
 
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Failed to fetch subscribed channels.")
+        extractErrorMessage(error, "Failed to fetch subscribed channels."),
       );
     }
-  }
+  },
 );
 
 const subscriptionSlice = createSlice({

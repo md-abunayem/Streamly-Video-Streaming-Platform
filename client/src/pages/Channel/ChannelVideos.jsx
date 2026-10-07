@@ -9,9 +9,13 @@ import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
 const ChannelVideos = () => {
   const dispatch = useDispatch();
   const { videos, isLoading, errorMessage } = useSelector(
-    (state) => state.video
+    (state) => state.video,
   );
   const { channel } = useSelector((state) => state.user);
+
+  const refreshVideos = () => {
+    if (channel?._id) dispatch(fetchUserVideos(channel._id));
+  };
 
   useEffect(() => {
     dispatch(fetchUserVideos(channel?._id));
@@ -23,7 +27,11 @@ const ChannelVideos = () => {
       {errorMessage && <ErrorMessage />}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {videos.map((video) => (
-          <ChannelVideoCard video={video} key={video._id} />
+          <ChannelVideoCard
+            video={video}
+            key={video._id}
+            onChange={refreshVideos}
+          />
         ))}
       </div>
     </>

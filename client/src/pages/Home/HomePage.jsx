@@ -9,13 +9,15 @@ import VideoThumbnailCard from "../../components/Video/VideoThumbnailCard";
 const HomePage = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
-  
+
   // extract q from URL
   const q = searchParams.get("q") || "";
 
-  const { isLoading, errorMessage, videos = [] } = useSelector(
-    (state) => state.video
-  );
+  const {
+    isLoading,
+    errorMessage,
+    videos = [],
+  } = useSelector((state) => state.video);
 
   const safeVideos = Array.isArray(videos) ? videos : [];
 
@@ -39,7 +41,7 @@ const HomePage = () => {
       )}
 
       {!isLoading && safeVideos.length === 0 && (
-        <p className="text-center text-gray-400 mt-10 text-lg">
+        <p className="mt-10 text-center text-lg text-text-muted">
           No videos found for "<span className="font-semibold">{q}</span>"
         </p>
       )}

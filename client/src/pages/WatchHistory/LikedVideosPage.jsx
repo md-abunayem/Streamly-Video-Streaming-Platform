@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchWatchHistory } from "../../redux/slices/userSlice";
+import { getLikedVideos } from "../../redux/slices/likeSlice";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import VideoThumbnailCard from "../../components/Video/VideoThumbnailCard";
 
-const WatchHistoryPage = () => {
+const LikedVideosPage = () => {
   const dispatch = useDispatch();
-  const { watchHistory, isLoading, errorMessage } = useSelector(
-    (state) => state.user,
+  const { likedVideos, isLoading, errorMessage } = useSelector(
+    (state) => state.like,
   );
 
   useEffect(() => {
-    dispatch(fetchWatchHistory());
+    dispatch(getLikedVideos());
   }, [dispatch]);
 
   if (isLoading) return <LoadingSpinner />;
@@ -20,14 +20,14 @@ const WatchHistoryPage = () => {
 
   return (
     <section className="p-6 text-text-primary">
-      <h1 className="mb-6 text-2xl font-semibold">Watch history</h1>
-      {watchHistory.length === 0 ? (
+      <h1 className="mb-6 text-2xl font-semibold">Liked videos</h1>
+      {likedVideos.length === 0 ? (
         <p className="py-12 text-center text-text-muted">
-          Your watch history is empty.
+          You have not liked any videos yet.
         </p>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {watchHistory.map((video) => (
+          {likedVideos.map(({ video }) => (
             <VideoThumbnailCard key={video._id} video={video} />
           ))}
         </div>
@@ -36,4 +36,4 @@ const WatchHistoryPage = () => {
   );
 };
 
-export default WatchHistoryPage;
+export default LikedVideosPage;

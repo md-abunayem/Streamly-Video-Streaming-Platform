@@ -8,6 +8,7 @@ import {
   clearSuccess,
   clearError,
 } from "../../redux/slices/commentSlice";
+import { toggleCommentLike } from "../../redux/slices/likeSlice";
 import { CircleUser } from "lucide-react";
 import { toast } from "react-toastify";
 import CommentCard from "./CommentCard";
@@ -19,7 +20,7 @@ const CommentSection = ({ videoId }) => {
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { allComments, isLoading, errorMessage, successMessage } = useSelector(
-    (state) => state.comment
+    (state) => state.comment,
   );
 
   //handle comment input
@@ -42,7 +43,7 @@ const CommentSection = ({ videoId }) => {
     if (editingCommentId) {
       //update existing comment
       dispatch(
-        updateComment({ commentId: editingCommentId, content: userComment })
+        updateComment({ commentId: editingCommentId, content: userComment }),
       )
         .then(() => dispatch(getAllComments(videoId)))
         .finally(() => {
@@ -51,7 +52,7 @@ const CommentSection = ({ videoId }) => {
         });
     } else {
       dispatch(createVideoComment({ videoId, content: userComment })).then(() =>
-        dispatch(getAllComments(videoId))
+        dispatch(getAllComments(videoId)),
       );
       setUserComment("");
     }
@@ -81,8 +82,21 @@ const CommentSection = ({ videoId }) => {
       return;
     }
     dispatch(deleteComment(comment._id)).then(() =>
-      dispatch(getAllComments(videoId))
+      dispatch(getAllComments(videoId)),
     );
+  };
+
+  const handleLikeComment = async (comment) => {
+    if (!isAuthenticated) {
+      toast.info("Please login to like comments.");
+      return;
+    }
+    try {
+      await dispatch(toggleCommentLike(comment._id)).unwrap();
+      dispatch(getAllComments(videoId));
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   //handle success and error message
@@ -98,11 +112,11 @@ const CommentSection = ({ videoId }) => {
   }, [errorMessage, successMessage, dispatch]);
 
   return (
-    <div className="lg:max-w-full px-3 py-3 sm:px-4 sm:py-4 md:px-6 md:py-4 lg:px-8 lg:py-4 xl:px-12 flex flex-col text-white">
+    <section className="flex flex-col px-3 py-3 text-text-primary sm:px-4 sm:py-4 md:px-6 md:py-4 lg:max-w-full lg:px-8 lg:py-4 xl:px-12">
       {/* Headline */}
-      <p className="text-white sm:text-xl md:text-2xl lg:text-3xl font-semibold">
+      <h2 className="text-xl font-semibold sm:text-2xl lg:text-3xl">
         Comments
-      </p>
+      </h2>
 
       {/* //Comment input */}
       <div>
@@ -116,8 +130,8 @@ const CommentSection = ({ videoId }) => {
               />
             </div>
           ) : (
-            <div className="h-8 w-8 md:h-12 md:w-12 rounded-full border-2 border-blue-800 justithy-center items-center">
-              <CircleUser className="h-full w-full text-blue-500" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface-raised md:h-12 md:w-12">
+              <CircleUser className="h-5 w-5 text-text-muted md:h-7 md:w-7" />
             </div>
           )}
           <input
@@ -125,7 +139,7 @@ const CommentSection = ({ videoId }) => {
             name="content"
             value={userComment}
             id="comment"
-            className="bg-transparent placeholder-gray-400 border-b focus:outline-none focus:border-white focus:scale-[1.01] focus:border-b-2 w-full sm:w-full  transition-transform duration-200 "
+            className="w-full border-b border-border bg-transparent text-text-primary transition focus:border-accent focus:outline-none placeholder:text-text-muted sm:w-full"
             placeholder="Write something..."
             onChange={handleCommentChange}
           />
@@ -135,7 +149,7 @@ const CommentSection = ({ videoId }) => {
         <div className="w-full flex justify-end">
           <button
             type="button"
-            className="h-10 mt-4 bg-gray-700 rounded-3xl px-4 relative"
+            className="relative mt-4 h-10 rounded-full bg-accent px-5 font-semibold text-accent-contrast transition hover:bg-accent-hover"
             onClick={handleSubmitComment}
           >
             {editingCommentId ? "Update" : "comment"}
@@ -149,10 +163,11 @@ const CommentSection = ({ videoId }) => {
             comment={comment}
             onDeleteComment={handleDeleteComment}
             onEditComment={handleEditComment}
+            onLikeComment={handleLikeComment}
           />
         ))}
       </div>
-    </div>
+    </section>
   );
 };
 

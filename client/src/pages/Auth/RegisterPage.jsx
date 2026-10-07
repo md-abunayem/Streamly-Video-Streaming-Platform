@@ -1,17 +1,26 @@
-import { User, Mail, LockIcon, Eye, EyeOff } from "lucide-react";
+import {
+  ArrowRight,
+  Clapperboard,
+  Eye,
+  EyeOff,
+  ImagePlus,
+  LockKeyhole,
+  Mail,
+  Play,
+  UserRound,
+} from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import apiClient from "../../services/apiClient";
 
 import {
   registerUser,
   clearError,
   clearSuccess,
 } from "../../redux/slices/authSlice";
-
+import "./AuthPages.css";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
@@ -20,7 +29,9 @@ const RegisterPage = () => {
   const [coverImagePreview, setCoverImagePreview] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { isLoading, errorMessage, successMessage } = useSelector((state) => state.auth);
+  const { isLoading, errorMessage, successMessage } = useSelector(
+    (state) => state.auth,
+  );
 
   const [formData, setFormData] = useState({
     userName: "",
@@ -31,36 +42,24 @@ const RegisterPage = () => {
     coverImage: null, //optional
   });
 
-  // const handleChange = (e) => {
-  //   const { name, value, files } = e.target;
-  //   setFormData((prev) => ({ ...prev, [name]: files ? files[0] : value })); //ternary operator used
-  // };
-
-  //handle success/error message
   useEffect(() => {
-    if(successMessage){
+    if (successMessage) {
       toast.success(successMessage);
       dispatch(clearSuccess());
-      navigate("/login")
+      navigate("/login");
     }
-    if(errorMessage){
+    if (errorMessage) {
       toast.error(errorMessage);
       dispatch(clearError());
     }
-  }, [successMessage,errorMessage, navigate, dispatch])
-  
+  }, [successMessage, errorMessage, navigate, dispatch]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    // Handle file inputs
     if (files && files[0]) {
       const file = files[0];
-
-      // Update formData with the file
       setFormData((prev) => ({ ...prev, [name]: file }));
-
-      // Create preview using FileReader
       const reader = new FileReader();
       reader.onloadend = () => {
         if (name === "avatar") {
@@ -71,12 +70,10 @@ const RegisterPage = () => {
       };
       reader.readAsDataURL(file);
     } else {
-      // Handle text inputs
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  //handle form submision
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -84,219 +81,245 @@ const RegisterPage = () => {
       toast.error("Please upload your avatar!");
       return;
     }
-    
+
     dispatch(clearError());
     dispatch(registerUser(formData));
   };
 
+  const renderUpload = (name, label, preview, required) => (
+    <label className="auth-upload-label">
+      {preview ? (
+        <img
+          src={preview}
+          alt={`${label} preview`}
+          className={
+            name === "avatar" ? "auth-upload-avatar" : "auth-upload-cover"
+          }
+        />
+      ) : (
+        <>
+          {name === "avatar" ? (
+            <UserRound
+              className="text-[var(--accent)]"
+              size={25}
+              aria-hidden="true"
+            />
+          ) : (
+            <ImagePlus
+              className="text-[var(--accent)]"
+              size={25}
+              aria-hidden="true"
+            />
+          )}
+          <span className="text-xs text-[var(--text-muted)]">
+            {name === "avatar"
+              ? "Choose a profile photo"
+              : "Add a channel cover"}
+          </span>
+        </>
+      )}
+      <span className="auth-upload-caption">
+        {label}
+        {required ? " · Required" : " · Optional"}
+      </span>
+      <input
+        type="file"
+        name={name}
+        id={name}
+        accept="image/*"
+        required={required}
+        onChange={handleChange}
+        className="sr-only"
+      />
+    </label>
+  );
+
   return (
-    <div
-      className={`flex flex-col justify-center items-center min-h-screen bg-gray-100 my-8`}
-    >
-      <div
-        className={`p-6 sm:w-[65%] md:120 lg:w-152 bg-white rounded-lg shadow-lg `}
-      >
-        <div className="flex flex-col items-center mb-6">
-          <div className="h-16 w-16 rounded-full bg-purple-900/80 flex justify-center items-center">
-            <User className="w-8 h-8 text-white" />
-          </div>
-          <p className="mt-4 text-3xl font-semibold">Create Account</p>
-          <p className="text-gray-500 text-xl">Sign up to get started</p>
-        </div>
-
-        {/* Error */}
-        {errorMessage && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-sm text-red-800">{errorMessage}</p>
-          </div>
-        )}
-
-        {/* form */}
-        <form
-          method="post"
-          onSubmit={handleRegister}
-          encType="multipart/form-data"
-        >
-          <div className="mb-4">
-            <label
-              htmlFor="userName"
-              className="block text-sm font-semibold mb-2 text-gray-700 pt-2"
-            >
-              Username*
-            </label>
-            <div className="flex border border-gray-300 rounded-sm py-1">
-              <User className="pl-2 mr-4 h-8 w-8" />
-              <input
-                type="text"
-                className="w-full outline-none"
-                placeholder="Enter your username"
-                required
-                onChange={handleChange}
-                name="userName"
-                id="userName"
-              />
-            </div>
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="email"
-              className="block text-sm font-semibold mb-2 text-gray-700 pt-2"
-            >
-              Email*
-            </label>
-            <div className="flex border border-gray-300 rounded-sm py-1">
-              <Mail className="pl-2 mr-4 h-8 w-8" />
-              <input
-                type="email"
-                className="w-full outline-none"
-                placeholder="Enter your email"
-                onChange={handleChange}
-                required
-                name="email"
-                id="email"
-              />
-            </div>
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="fullName"
-              className="block text-sm font-semibold mb-2 text-gray-700 pt-2"
-            >
-              Full Name*
-            </label>
-            <div className="flex border border-gray-300 rounded-sm py-1">
-              <User className="pl-2 mr-4 h-8 w-8" />
-              <input
-                type="text"
-                className="w-full outline-none"
-                placeholder="Enter your full name"
-                onChange={handleChange}
-                required
-                name="fullName"
-                id="fullName"
-              />
-            </div>
-          </div>
-          <div className="mb-4">
-            <label
-              htmlFor="password"
-              className="block text-sm font-semibold mb-2 text-gray-700 pt-2"
-            >
-              Password*
-            </label>
-            <div className="flex border border-gray-300 rounded-sm py-1">
-              <LockIcon className="pl-2 mr-4 h-8 w-8" />
-              <input
-                type={showPassword ? "text" : "password"}
-                className="w-full outline-none"
-                placeholder="Enter your password"
-                onChange={handleChange}
-                required
-                name="password"
-                id="password"
-              />
-              <button
-                onClick={() => setShowPassword(!showPassword)}
-                className="pr-2"
-              >
-                {showPassword ? (
-                  <EyeOff className="text-sm" />
-                ) : (
-                  <Eye className="text-sm" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Avatar*
-            </label>
-            <div className="flex items-center space-x-4">
-              <label className="flex-1 cursor-pointer">
-                {avatarPreview ? (
-                  <div className="w-full h-32 rounded-lg overflow-hidden border-2 border-blue-500">
-                    <img
-                      src={avatarPreview}
-                      alt="Cover preview"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
-                    <div className="text-center">
-                      <User className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-xs text-gray-500 mt-1">
-                        PNG, JPG up to 5MB
-                      </p>
-                    </div>
-                  </div>
-                )}
-                <input
-                  type="file"
-                  name="avatar"
-                  id="avatar"
-                  accept="image/*"
-                  onChange={handleChange}
-                  className="hidden"
-                />
-              </label>
-            </div>
-          </div>
-
-          <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Cover Image
-            </label>
-            <div className="flex items-center space-x-4">
-              <label className="flex-1 cursor-pointer">
-                {coverImagePreview ? (
-                  <div className="w-full h-32 rounded-lg overflow-hidden border-2 border-blue-500">
-                    <img
-                      src={coverImagePreview}
-                      alt="Cover preview"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
-                    <div className="text-center">
-                      <User className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                      <p className="text-xs text-gray-500 mt-1">
-                        PNG, JPG up to 5MB
-                      </p>
-                    </div>
-                  </div>
-                )}
-                <input
-                  type="file"
-                  name="coverImage"
-                  id="coverImage"
-                  accept="image/*"
-                  onChange={handleChange}
-                  className="hidden"
-                />
-              </label>
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="w-full mt-8 bg-purple-500 py-2 rounded-xl text-white font-bold text-xl"
-          >
-            {isLoading ? "Registering" : "Sign Up"}
-          </button>
-        </form>
-        {/* existing account instruction */}
-        <p className="w-full text-center mt-8 text-gray-600 text-[1.2rem]">
-          Already have an account?{" "}
-          <Link to={"/login"}>
-            <span className={"text-purple-700 font-bold text-[1.2rem]"}>
-              Log In
+    <main className="auth-shell">
+      <section className="auth-form-side">
+        <div className="auth-form-wrap">
+          <Link to="/" className="auth-brand" aria-label="Streamly home">
+            <span className="auth-brand-mark">
+              <Play size={17} fill="currentColor" />
             </span>
+            <span className="auth-brand-name">streamly</span>
           </Link>
-        </p>
-      </div>
-    </div>
+
+          <p className="auth-kicker">Make yourself at home</p>
+          <h1 className="auth-title">Join the story.</h1>
+          <p className="auth-subtitle">
+            Create your account and build a place for the videos and creators
+            you love.
+          </p>
+
+          {errorMessage && (
+            <div
+              role="alert"
+              className="mt-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+            >
+              {errorMessage}
+            </div>
+          )}
+
+          <form
+            onSubmit={handleRegister}
+            encType="multipart/form-data"
+            className="auth-form auth-register-form"
+          >
+            <div className="auth-register-fields">
+              <div>
+                <label htmlFor="userName" className="auth-field-label">
+                  Username
+                </label>
+                <div className="auth-input-wrap">
+                  <UserRound
+                    className="auth-input-icon"
+                    size={17}
+                    aria-hidden="true"
+                  />
+                  <input
+                    type="text"
+                    className="auth-input"
+                    placeholder="Choose a username"
+                    autoComplete="username"
+                    autoCapitalize="none"
+                    required
+                    value={formData.userName}
+                    onChange={handleChange}
+                    name="userName"
+                    id="userName"
+                  />
+                </div>
+              </div>
+              <div>
+                <label htmlFor="fullName" className="auth-field-label">
+                  Full name
+                </label>
+                <div className="auth-input-wrap">
+                  <UserRound
+                    className="auth-input-icon"
+                    size={17}
+                    aria-hidden="true"
+                  />
+                  <input
+                    type="text"
+                    className="auth-input"
+                    placeholder="Your name"
+                    autoComplete="name"
+                    required
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    name="fullName"
+                    id="fullName"
+                  />
+                </div>
+              </div>
+              <div className="auth-field-full">
+                <label htmlFor="email" className="auth-field-label">
+                  Email address
+                </label>
+                <div className="auth-input-wrap">
+                  <Mail
+                    className="auth-input-icon"
+                    size={17}
+                    aria-hidden="true"
+                  />
+                  <input
+                    type="email"
+                    className="auth-input"
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    name="email"
+                    id="email"
+                  />
+                </div>
+              </div>
+              <div className="auth-field-full">
+                <label htmlFor="password" className="auth-field-label">
+                  Password
+                </label>
+                <div className="auth-input-wrap">
+                  <LockKeyhole
+                    className="auth-input-icon"
+                    size={17}
+                    aria-hidden="true"
+                  />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="auth-input"
+                    placeholder="Create a password"
+                    autoComplete="new-password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                    name="password"
+                    id="password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((visible) => !visible)}
+                    className="auth-password-toggle"
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="auth-upload-grid">
+              {renderUpload("avatar", "Profile photo", avatarPreview, true)}
+              {renderUpload(
+                "coverImage",
+                "Cover image",
+                coverImagePreview,
+                false,
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="auth-primary-button mt-1"
+              disabled={isLoading}
+            >
+              {isLoading ? "Creating your account..." : "Create account"}
+              {!isLoading && <ArrowRight size={17} aria-hidden="true" />}
+            </button>
+          </form>
+
+          <p className="auth-switch">
+            Already part of Streamly? <Link to="/login">Sign in</Link>
+          </p>
+        </div>
+      </section>
+
+      <aside
+        className="auth-visual"
+        aria-label="Streamly film-inspired artwork"
+      >
+        <div className="auth-visual-content">
+          <span className="auth-visual-caption">
+            <Clapperboard size={14} /> A community for every point of view
+          </span>
+          <h2 className="auth-visual-title">
+            There’s always
+            <br />
+            more to discover.
+          </h2>
+          <p className="auth-visual-copy">
+            Find your people through the things you watch, make, and share.
+          </p>
+          <p className="auth-footer-note">
+            Your channel. Your taste. Your Streamly.
+          </p>
+        </div>
+      </aside>
+    </main>
   );
 };
 

@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Comment } from "../models/comment.model.js";
 import { Video } from "../models/video.model.js";
+import { createNotification } from "../utils/notificationHelpers.js";
 
 //get all comment for a video - pagination, sorting, latest first
 const getVideoComments = asyncHandler(async (req, res) => {
@@ -161,6 +162,14 @@ const addComment = asyncHandler(async (req, res) => {
     owner,
   });
 
+  await createNotification({
+    recipient: video.owner,
+    actor: owner,
+    type: "new_comment",
+    video: video._id,
+    comment: comment._id,
+  });
+
   return res
     .status(201)
     .json(new ApiResponse(201, comment, "Comment added successfully"));
@@ -233,9 +242,4 @@ const deleteComment = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, null, "Comment deleted successfully"));
 });
 
-export { 
-    getVideoComments,
-    addComment, 
-    updateComment, 
-    deleteComment 
-};
+export { getVideoComments, addComment, updateComment, deleteComment };

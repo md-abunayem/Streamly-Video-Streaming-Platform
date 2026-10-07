@@ -14,6 +14,10 @@ import ChannelTweets from "../pages/Channel/ChannelTweets";
 import UploadVideoPage from "../pages/Upload/UploadVideoPage";
 import PlaylistVideosPage from "../pages/Playlist/PlaylistVideosPage";
 import WatchHistory from "../pages/WatchHistory/WatchHistoryPage";
+import LikedVideosPage from "../pages/WatchHistory/LikedVideosPage";
+import ChannelFollowers from "../pages/Channel/ChannelFollowers";
+import ProfilePage from "../pages/Profile/ProfilePage";
+import ChannelDashboard from "../pages/Channel/ChannelDashboard";
 
 const AppRoutes = () => {
   return (
@@ -29,7 +33,18 @@ const AppRoutes = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/video/:videoId" element={<VideoDetailPage />} />
           <Route path="/search" element={<HomePage />} />
-          <Route path="/playlist/:playlistId" element={<PlaylistVideosPage />} />
+          <Route
+            path="/playlist/:playlistId"
+            element={<PlaylistVideosPage />}
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Protected Channel Routes */}
           <Route
@@ -42,10 +57,12 @@ const AppRoutes = () => {
           >
             {/* Nested routes for your channel tabs */}
             <Route index element={<ChannelVideos />} /> {/* Default tab */}
+            <Route path="dashboard" element={<ChannelDashboard />} />
             <Route path="videos" element={<ChannelVideos />} />
             <Route path="playlists" element={<ChannelPlaylists />} />
             <Route path="tweets" element={<ChannelTweets />} />
             <Route path="following" element={<ChannelFollowing />} />
+            <Route path="followers" element={<ChannelFollowers />} />
             <Route path="upload-video" element={<UploadVideoPage />} />
           </Route>
 
@@ -62,6 +79,14 @@ const AppRoutes = () => {
             element={
               <ProtectedRoute>
                 <WatchHistory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/liked-videos"
+            element={
+              <ProtectedRoute>
+                <LikedVideosPage />
               </ProtectedRoute>
             }
           />

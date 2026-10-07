@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -8,6 +8,10 @@ const SearchBar = () => {
 
   //local state to hold user search input
   const [inputValue, setInputValue] = useState(searchParams.get("q") || "");
+
+  useEffect(() => {
+    setInputValue(searchParams.get("q") || "");
+  }, [searchParams]);
 
   const handleSearchChange = (e) => {
     setInputValue(e.target.value);
@@ -27,16 +31,19 @@ const SearchBar = () => {
   };
 
   return (
-    <div
-      className={`flex width-1/2 bg-gray-700/60 px-8 py-2 sm:w-40 md:w-104 lg:w-[40%] rounded-full transition-all duration-300 focus-within:ring-2 focus-within:ring-purple-500 focus-within:bg-gray-700 focus-within:sm:w-72 focus-within:md:w-[40rem]`}
-    >
-      <Search className={"text-purple-500"} />
-      <div className={`px-4 w-full`}>
+    <div className="order-last mx-2 flex h-10 min-w-0 basis-full self-center items-center rounded-xl border border-border bg-surface-raised px-3 shadow-soft transition focus-within:border-accent focus-within:bg-surface focus-within:ring-2 focus-within:ring-accent/20 sm:order-none sm:mx-4 sm:h-11 sm:max-w-2xl sm:flex-1 sm:basis-0 sm:px-4">
+      <Search
+        className="h-[18px] w-[18px] shrink-0 text-accent"
+        aria-hidden="true"
+      />
+      <div className="w-full min-w-0 pl-2.5 sm:pl-3">
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Search Videos, Channels..."
-            className={`w-full outline-none`}
+            aria-label="Search videos and channels"
+            value={inputValue}
+            className="h-8 w-full min-w-0 bg-transparent text-base text-text-primary outline-none placeholder:text-text-muted sm:text-sm"
             onChange={handleSearchChange}
           />
         </form>

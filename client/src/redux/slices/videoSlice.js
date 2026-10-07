@@ -91,11 +91,7 @@ export const publishVideo = createAsyncThunk(
         }
       });
 
-      const response = await apiClient.post("/videos/upload", data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await apiClient.post("/videos/upload", data);
 
       return response?.data?.data;
     } catch (error) {
@@ -232,7 +228,7 @@ const videoSlice = createSlice({
 
     //Get(single video) Video By Id
     builder
-      .addCase(getVideoById.pending, (state, action) => {
+      .addCase(getVideoById.pending, (state) => {
         state.isLoading = true;
         state.errorMessage = null;
         state.successMessage = null;

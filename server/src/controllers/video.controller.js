@@ -2,8 +2,14 @@ import mongoose, { isValidObjectId } from "mongoose";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import {
+  deleteFromCloudinary,
+  uploadOnCloudinary,
+} from "../utils/cloudinary.js";
 import { Video } from "../models/video.model.js";
+import { User } from "../models/user.model.js";
+import { Subscription } from "../models/subscription.model.js";
+import { createNotifications } from "../utils/notificationHelpers.js";
 import { ObjectId } from "mongodb";
 
 //get all video controller
@@ -111,8 +117,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Title and description are required");
   }
 
-  const videoFileLocalPath = req.files?.videoFile?.[0].path;
-  const thumbnailLocalPath = req.files?.thumbnail[0]?.path;
+  const videoFileLocalPath = req.files?.videoFile?.[0]?.path;
+  const thumbnailLocalPath = req.files?.thumbnail?.[0]?.path;
 
   if (!videoFileLocalPath || !thumbnailLocalPath) {
     throw new ApiError(400, "Video file and thumbnail are required");
@@ -122,15 +128,13 @@ const publishAVideo = asyncHandler(async (req, res) => {
   const videoFile = await uploadOnCloudinary(videoFileLocalPath);
   const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
 
-  if (!videoFile?.url || !thumbnail?.url) {
-    throw new ApiError(500, "Error uploading file to cloudinary");
-  }
-
   const video = await Video.create({
     title,
     description,
     videoFile: videoFile.url,
+    videoFilePublicId: videoFile.public_id,
     thumbnail: thumbnail.url,
+    thumbnailPublicId: thumbnail.public_id,
     duration: videoFile.duration || 0,
     owner: req.user._id,
   });
@@ -203,6 +207,21 @@ const getVideoById = asyncHandler(async (req, res) => {
   if (videoDoc) {
     videoDoc.views += 1;
     await videoDoc.save();
+  }
+
+  if (req.user?._id) {
+    const viewer = await User.findById(req.user._id);
+    if (viewer) {
+      const videoObjectId = video._id;
+      viewer.watchHistory = [
+        videoObjectId,
+        ...viewer.watchHistory.filter(
+          (watchedVideoId) =>
+            watchedVideoId.toString() !== videoObjectId.toString()
+        ),
+      ].slice(0, 100);
+      await viewer.save({ validateBeforeSave: false });
+    }
   }
 
   return res
@@ -311,7 +330,19 @@ const deleteVideo = asyncHandler(async (req, res) => {
     throw new ApiError(400, "You are not allowed to delete this video");
   }
 
-  //delete video
+  await Promise.all([
+    deleteFromCloudinary({
+      publicId: video.videoFilePublicId,
+      assetUrl: video.videoFile,
+      resourceType: "video",
+    }),
+    deleteFromCloudinary({
+      publicId: video.thumbnailPublicId,
+      assetUrl: video.thumbnail,
+      resourceType: "image",
+    }),
+  ]);
+
   await Video.findByIdAndDelete(videoId);
 
   //return response
@@ -343,6 +374,20 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
   video.isPublished = !video.isPublished;
 
   await video.save(); //save at database and return updated value also
+
+  if (video.isPublished) {
+    const subscriberRecords = await Subscription.find({
+      channel: video.owner,
+    }).select("subscriber");
+    await createNotifications(
+      subscriberRecords.map(({ subscriber }) => ({
+        recipient: subscriber,
+        actor: video.owner,
+        type: "new_video",
+        video: video._id,
+      }))
+    );
+  }
   // video = await video.save();   alternative (also redundant)
 
   //return response

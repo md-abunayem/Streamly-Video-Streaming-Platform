@@ -17,13 +17,13 @@ const MainLayout = () => {
   return (
     <>
       <Header isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <div className="w-full dark:bg-gray-900 ">
+      <div className="w-full">
         <Sidebar
           isSidebarOpen={isSidebarOpen}
           closeSidebar={closeSidebar}
         ></Sidebar>
       </div>
-      <main className={`min-h-screen pt-16 md:pt-20 dark:bg-gray-900 bg-white`}>
+      <main className="min-h-screen bg-[var(--page)] pt-24 text-[var(--text-primary)] sm:pt-14 md:pt-16">
         <Outlet />
       </main>
     </>

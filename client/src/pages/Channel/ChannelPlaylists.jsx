@@ -16,7 +16,6 @@ const ChannelPlaylists = () => {
   const dispatch = useDispatch();
   const { playlists, loading } = useSelector((state) => state.playlist);
   const { channel } = useSelector((state) => state.user);
-  
 
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRefs = useRef({});
@@ -69,14 +68,14 @@ const ChannelPlaylists = () => {
 
   return (
     <div className="w-full min-h-auto p-4 md:p-8">
-      <h2 className="text-2xl md:text-3xl font-semibold text-white mb-6">
+      <h2 className="mb-6 text-2xl font-semibold text-text-primary md:text-3xl">
         Playlists
       </h2>
 
       {loading && <LoadingSpinner />}
 
       {!loading && playlists?.length === 0 && (
-        <div className="text-center text-gray-400 mt-20">
+        <div className="mt-20 text-center text-text-muted">
           <p className="text-lg">No playlists yet</p>
           <p className="text-sm">Create a playlist to organize your videos</p>
         </div>
@@ -87,17 +86,17 @@ const ChannelPlaylists = () => {
           <div key={pl._id} className="relative group">
             <Link
               to={`/playlist/${pl._id}`}
-              className="block bg-gray-800 hover:bg-gray-700 transition rounded-lg overflow-hidden"
+              className="block overflow-hidden rounded-lg border border-border bg-surface shadow-soft transition hover:-translate-y-0.5 hover:shadow-raised"
             >
               {/* Thumbnail */}
-              <div className="relative h-40 bg-black">
+              <div className="relative h-40 bg-surface-sunken">
                 {pl.videos?.length > 0 ? (
                   <img
                     src={pl.videos[0].thumbnail}
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="flex items-center justify-center h-full text-gray-500">
+                  <div className="flex h-full items-center justify-center text-text-muted">
                     No Thumbnail
                   </div>
                 )}
@@ -108,10 +107,10 @@ const ChannelPlaylists = () => {
               </div>
 
               <div className="p-4">
-                <h3 className="text-white font-semibold text-lg truncate">
+                <h3 className="truncate text-lg font-semibold text-text-primary">
                   {pl.name}
                 </h3>
-                <p className="text-gray-400 text-sm truncate">
+                <p className="truncate text-sm text-text-muted">
                   {pl.description || "No description"}
                 </p>
               </div>
@@ -123,7 +122,7 @@ const ChannelPlaylists = () => {
               className="absolute top-2 right-2 z-20"
             >
               <EllipsisVertical
-                className="text-white cursor-pointer opacity-0 group-hover:opacity-100 transition"
+                className="cursor-pointer rounded-full p-1 text-white opacity-0 transition hover:bg-black/40 group-hover:opacity-100"
                 onClick={(e) => {
                   e.preventDefault();
                   setOpenMenuId(openMenuId === pl._id ? null : pl._id);
@@ -132,22 +131,22 @@ const ChannelPlaylists = () => {
 
               {/* Dropdown Menu */}
               {openMenuId === pl._id && (
-                <div className="absolute top-10 right-0 z-30 bg-gray-900 text-white text-sm rounded-lg shadow-lg p-2 w-36">
+                <div className="absolute right-0 top-10 z-30 w-36 rounded-md border border-border bg-surface-raised p-2 text-sm text-text-primary shadow-raised">
                   <button
                     onClick={() => openAddVideoModal(pl._id)}
-                    className="w-full text-left px-2 py-1 hover:bg-gray-700 rounded"
+                    className="w-full rounded px-2 py-1 text-left hover:bg-accent-soft"
                   >
                     Add Video
                   </button>
                   <button
                     onClick={() => openEditPlaylistModel(pl._id)}
-                    className="w-full text-left px-2 py-1 hover:bg-gray-700 rounded"
+                    className="w-full rounded px-2 py-1 text-left hover:bg-accent-soft"
                   >
                     Edit Playlist
                   </button>
                   <button
                     onClick={() => handleDeletePlaylist(pl._id)}
-                    className="w-full text-left px-2 py-1 hover:bg-gray-700 rounded"
+                    className="w-full rounded px-2 py-1 text-left text-red-700 hover:bg-red-50"
                   >
                     Delete
                   </button>

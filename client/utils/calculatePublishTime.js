@@ -1,28 +1,28 @@
 export const calculatePublishTime = (createdAt) => {
-  const createdDate = new Date(createdAt);
-  const now = new Date();
+  const timestamp = new Date(createdAt).getTime();
+  if (!Number.isFinite(timestamp)) return "Unknown date";
 
-  const diff = (now - createdDate) / 1000; //seconds
+  const elapsedSeconds = (timestamp - Date.now()) / 1000;
+  const absoluteElapsed = Math.abs(elapsedSeconds);
+  if (absoluteElapsed < 10) return "Just now";
 
-  if (diff < 60) {
-    return `${Math.floor(diff)} sec ago`;
-  }
+  const units = [
+    { name: "second", seconds: 1 },
+    { name: "minute", seconds: 60 },
+    { name: "hour", seconds: 60 * 60 },
+    { name: "day", seconds: 24 * 60 * 60 },
+    { name: "month", seconds: 30 * 24 * 60 * 60 },
+    { name: "year", seconds: 365 * 24 * 60 * 60 },
+  ];
 
-  if (diff < 3600) {
-    return `${Math.floor(diff / 60)} mins ago`;
-  }
+  const unit =
+    [...units].reverse().find(({ seconds }) => absoluteElapsed >= seconds) ||
+    units[0];
+  const value = Math.max(1, Math.floor(absoluteElapsed / unit.seconds));
+  const relativeTime = new Intl.RelativeTimeFormat(undefined, {
+    numeric: "auto",
+    style: "long",
+  });
 
-  if (diff < 85400) {
-    return `${Math.floor(diff / 3600)} hrs ago`;
-  }
-
-  if (diff < 2592000) {
-    return `${Math.floor(diff / 84000)} days ago`;
-  }
-
-  if (diff < 2592000) {
-    return `${Math.floor(diff / 2592000)} months ago`;
-  }
-
-  return `${Math.floor(diff / 2592000)}  years ago`;
+  return relativeTime.format(elapsedSeconds < 0 ? -value : value, unit.name);
 };

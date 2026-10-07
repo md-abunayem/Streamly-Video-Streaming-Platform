@@ -32,10 +32,10 @@ export const registerUser = createAsyncThunk(
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Registration failed. Please try again.")
+        extractErrorMessage(error, "Registration failed. Please try again."),
       );
     }
-  }
+  },
 );
 
 // Login User
@@ -62,11 +62,11 @@ export const loginUser = createAsyncThunk(
       return rejectWithValue(
         extractErrorMessage(
           error,
-          "Login failed. Please check your credentials."
-        )
+          "Login failed. Please check your credentials.",
+        ),
       );
     }
-  }
+  },
 );
 
 //Logout User
@@ -87,10 +87,10 @@ export const logoutUser = createAsyncThunk(
       localStorage.removeItem("refreshToken");
 
       return rejectWithValue(
-        extractErrorMessage(error, "Logout failed. Please try again.")
+        extractErrorMessage(error, "Logout failed. Please try again."),
       );
     }
-  }
+  },
 );
 
 //Get Current User
@@ -105,11 +105,11 @@ export const getCurrentUser = createAsyncThunk(
       return rejectWithValue(
         extractErrorMessage(
           error,
-          "Failed to fetch user data. Please try again."
-        )
+          "Failed to fetch user data. Please try again.",
+        ),
       );
     }
-  }
+  },
 );
 
 //Update Accout Details
@@ -124,11 +124,11 @@ export const updateAccountDetails = createAsyncThunk(
       return rejectWithValue(
         extractErrorMessage(
           error,
-          "Failed to update account details. Please try again."
-        )
+          "Failed to update account details. Please try again.",
+        ),
       );
     }
-  }
+  },
 );
 
 //Change User Password
@@ -136,9 +136,9 @@ export const changeUserPassword = createAsyncThunk(
   "auth/changeUserPassword",
   async (passwords, { rejectWithValue }) => {
     try {
-      const response = await apiClient.patch(
+      const response = await apiClient.post(
         "/users/change-password",
-        passwords
+        passwords,
       );
 
       return response?.data?.message;
@@ -146,11 +146,11 @@ export const changeUserPassword = createAsyncThunk(
       return rejectWithValue(
         extractErrorMessage(
           error,
-          "Failed to change password. Please try again."
-        )
+          "Failed to change password. Please try again.",
+        ),
       );
     }
-  }
+  },
 );
 
 //Update User Avatar
@@ -170,10 +170,13 @@ export const updateUserAvatar = createAsyncThunk(
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Failed to update avatar. Please try again.")
+        extractErrorMessage(
+          error,
+          "Failed to update avatar. Please try again.",
+        ),
       );
     }
-  }
+  },
 );
 
 //Update User Cover Image
@@ -191,7 +194,7 @@ export const updateUserCoverImage = createAsyncThunk(
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
       return response?.data?.data;
@@ -199,11 +202,11 @@ export const updateUserCoverImage = createAsyncThunk(
       return rejectWithValue(
         extractErrorMessage(
           error,
-          "Failed to update cover image. Please try again."
-        )
+          "Failed to update cover image. Please try again.",
+        ),
       );
     }
-  }
+  },
 );
 
 const authSlice = createSlice({

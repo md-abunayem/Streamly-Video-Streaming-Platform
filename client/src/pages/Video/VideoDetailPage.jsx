@@ -13,7 +13,7 @@ const VideoDetailPage = () => {
   const { videoId } = useParams();
   const dispatch = useDispatch();
   const { isLoading, errorMessage, selectedVideo } = useSelector(
-    (state) => state.video
+    (state) => state.video,
   );
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const VideoDetailPage = () => {
         </div>
       )}
       {errorMessage && <ErrorMessage />}
-      <div className="w-screen lg:flex lg:justify-between lg:pr-16 ">
+      <div className="w-full lg:flex lg:justify-between lg:pr-16">
         <div className="w-full">
           <VideoPlayerCard />
           <div className="lg:w-[40%] w-full lg:mt-4 lg:hidden">

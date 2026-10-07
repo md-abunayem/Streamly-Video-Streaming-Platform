@@ -19,13 +19,14 @@ const YourChannel = () => {
   const { channel } = useSelector((state) => state.user);
   const { user } = useSelector((state) => state.auth);
   const { isEditPlaylistModalAppear } = useSelector(
-    (state) => state.pageAppear
+    (state) => state.pageAppear,
   );
   const [showCreateMenu, setShowCreateMenu] = useState(false);
   const [createPlaylistAppear, setCreatePlaylistAppear] = useState(false);
 
-  const { isAddVideoToPlaylistApear,isCreateTweetAppear } = useSelector((state) => state.pageAppear);
-
+  const { isAddVideoToPlaylistApear, isCreateTweetAppear } = useSelector(
+    (state) => state.pageAppear,
+  );
 
   useEffect(() => {
     if (user?.userName) {
@@ -34,9 +35,9 @@ const YourChannel = () => {
   }, [dispatch, user?.userName]);
 
   return (
-    <div className="text-white min-h-screen bg-black">
+    <div className="min-h-screen bg-[var(--page)] text-[var(--text-primary)]">
       {/* ===== Cover Image Section ===== */}
-      <div className="relative w-full h-[25vh]">
+      <div className="relative h-[25vh] min-h-40 w-full">
         {channel?.coverImage ? (
           <img
             src={channel.coverImage}
@@ -44,31 +45,33 @@ const YourChannel = () => {
             className="h-full w-full object-cover"
           />
         ) : (
-          <div className="h-full w-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500"></div>
+          <div className="h-full w-full bg-[var(--surface-raised)]"></div>
         )}
 
         {/* ===== Avatar Section (overlapping) ===== */}
-        <div className="absolute -bottom-27 left-6 md:left-12 z-10 flex items-end gap-4">
-          <div className="w-28 h-28 md:w-36 md:h-36 rounded-full border-4 border-white overflow-hidden shadow-lg">
+        <div className="absolute -bottom-20 left-4 z-10 flex max-w-[calc(100%-2rem)] min-w-0 items-end gap-3 sm:-bottom-24 sm:left-6 sm:gap-4 md:-bottom-28 md:left-12">
+          <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-surface bg-surface shadow-raised sm:h-28 sm:w-28 md:h-36 md:w-36">
             <img
               src={channel?.avatar || "/default-avatar.png"}
               alt="Profile"
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="pb-2">
-            <h1 className="text-2xl font-bold">
+          <div className="min-w-0 pb-1 sm:pb-2">
+            <h1 className="truncate text-lg font-bold sm:text-xl md:text-2xl">
               {channel?.fullName || "Full Name"}
             </h1>
-            <p className="text-gray-400">@{channel?.userName || "username"}</p>
-            <div className="flex gap-6 text-gray-400 text-sm mt-1">
+            <p className="truncate text-xs text-text-muted sm:text-sm">
+              @{channel?.userName || "username"}
+            </p>
+            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-[0.68rem] text-text-muted sm:gap-5 sm:text-xs md:text-sm">
               <p>
-                <span className="font-semibold text-white">
+                <span className="font-semibold text-text-primary">
                   {calculateSubscribers(channel?.subscribersCount) || 0}
-                </span>{" "}
+                </span>
               </p>
               <p>
-                <span className="font-semibold text-white">
+                <span className="font-semibold text-text-primary">
                   {calculateFollowing(channel?.channelsSubscribedToCount) || 0}
                 </span>
               </p>
@@ -89,14 +92,14 @@ const YourChannel = () => {
       {isEditPlaylistModalAppear && <EditPlaylistModal />}
 
       {/* Render Create Tweet window */}
-      {isCreateTweetAppear && <CreateTweet/>}
+      {isCreateTweetAppear && <CreateTweet />}
 
       {/* ===== Tabs Section ===== */}
-      <div className="mt-32 ml-6 md:ml-12 relative">
-        <div className="absolute -top-24 right-6 md:right-12">
+      <div className="relative ml-4 mt-24 sm:ml-6 sm:mt-28 md:ml-12 md:mt-32">
+        <div className="mb-3 flex justify-end pr-2 md:absolute md:-top-24 md:right-12 md:mb-0 md:pr-0">
           <button
             onClick={() => setShowCreateMenu(!showCreateMenu)}
-            className="flex justify-center items-center bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 rounded-lg font-semibold"
+            className="flex items-center justify-center rounded-md bg-[var(--accent)] px-6 py-2 font-semibold text-white hover:bg-[var(--accent-hover)]"
           >
             <Plus className="mr-1 font-bold" />
             Create
@@ -111,13 +114,23 @@ const YourChannel = () => {
           )}
         </div>
 
-        <div className="mt-6 flex justify-around gap-6 border-b border-gray-700 pb-2 mr-12">
+        <div className="mr-2 flex gap-5 overflow-x-auto border-b border-border pb-2 sm:mr-12 sm:gap-6">
+          <NavLink
+            to="/your-channel/dashboard"
+            className={({ isActive }) =>
+              isActive
+                ? "border-b-2 border-[var(--accent)] text-[var(--accent)]"
+                : "hover:text-[var(--accent)]"
+            }
+          >
+            Overview
+          </NavLink>
           <NavLink
             to="/your-channel/videos"
             className={({ isActive }) =>
               isActive
-                ? "text-pink-400 border-b-2 border-pink-400"
-                : "hover:text-pink-400"
+                ? "border-b-2 border-[var(--accent)] text-[var(--accent)]"
+                : "hover:text-[var(--accent)]"
             }
           >
             Videos
@@ -126,8 +139,8 @@ const YourChannel = () => {
             to="/your-channel/playlists"
             className={({ isActive }) =>
               isActive
-                ? "text-pink-400 border-b-2 border-pink-400"
-                : "hover:text-pink-400"
+                ? "border-b-2 border-[var(--accent)] text-[var(--accent)]"
+                : "hover:text-[var(--accent)]"
             }
           >
             Playlists
@@ -136,8 +149,8 @@ const YourChannel = () => {
             to="/your-channel/tweets"
             className={({ isActive }) =>
               isActive
-                ? "text-pink-400 border-b-2 border-pink-400"
-                : "hover:text-pink-400"
+                ? "border-b-2 border-[var(--accent)] text-[var(--accent)]"
+                : "hover:text-[var(--accent)]"
             }
           >
             Tweets
@@ -146,8 +159,8 @@ const YourChannel = () => {
             to="/your-channel/following"
             className={({ isActive }) =>
               isActive
-                ? "text-pink-400 border-b-2 border-pink-400"
-                : "hover:text-pink-400"
+                ? "border-b-2 border-[var(--accent)] text-[var(--accent)]"
+                : "hover:text-[var(--accent)]"
             }
           >
             Following

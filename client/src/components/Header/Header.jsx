@@ -1,16 +1,15 @@
-import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Menu, Moon, Sun, Search, User, Bell, X } from "lucide-react";
+import { Menu, Moon, Sun, User, X } from "lucide-react";
 
 import { ThemeContext } from "../../context/ThemeContext";
 import SearchBar from "./SearchBar";
 import { logoutUser, clearAuth } from "../../redux/slices/authSlice";
+import NotificationBell from "../Notifications/NotificationBell";
 
 const Header = ({ isSidebarOpen, toggleSidebar }) => {
-  // const { theme, toggleTheme } = useContext(ThemeContext);
-  // console.log(theme);
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.auth);
 
@@ -30,12 +29,14 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
   };
 
   return (
-    <header className=" border border-b-[0.5px] border-white/30">
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 sm:h-12 md:h-20 flex items-center justify-between bg-gray-900  shadow-purple-500/10 dark:text-white text-black border-b-[0.5px] border-white/30`}
-      >
-        <div className={`px-4 sm:px-6 flex items-center sm:w-32 md:w-[30%]`}>
-          <button onClick={toggleSidebar} className={`sm:mr-4 md:mx-12`}>
+    <header>
+      <nav className="fixed inset-x-0 top-0 z-50 flex h-24 flex-wrap content-center justify-between gap-y-1 border-b border-border bg-surface text-text-primary shadow-soft sm:h-14 sm:flex-nowrap sm:gap-y-0 md:h-16">
+        <div className="flex basis-[calc(50%-0.5rem)] shrink-0 items-center px-2 sm:w-32 sm:basis-auto sm:px-6 md:w-[30%]">
+          <button
+            onClick={toggleSidebar}
+            className="rounded-md p-1.5 transition-colors hover:bg-surface-raised sm:mr-2 sm:p-2 md:mx-4"
+            aria-label="Toggle navigation"
+          >
             {isSidebarOpen ? (
               <X className={`h-7 w-7`} />
             ) : (
@@ -43,49 +44,53 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
             )}
           </button>
 
-          <div className={`h-9 w-20 rounded-xs object-contain`}>
-            <img src="src/assets/images/logo.png" alt="Logo" />
+          <div className="h-9 w-14 object-contain sm:w-20">
+            <img src="/src/assets/images/logo.png" alt="Streamly" />
           </div>
         </div>
 
         {/* Search Bar */}
         <SearchBar />
 
-        <div
-          className={`flex justify-between items-center h-20 px-20 sm:gap-4 md:gap-6 md:pr-12`}
-        >
+        <div className="flex basis-[calc(50%-0.5rem)] shrink-0 items-center justify-end gap-0 px-1 sm:basis-auto sm:gap-4 sm:px-2 md:px-6">
           {!isAuthenticated ? (
             <NavLink
               to="/login"
-              className="text-lg font-semibold text-blue-500"
+              className="text-xs font-semibold leading-none text-accent sm:text-sm"
             >
               Login
             </NavLink>
           ) : (
             <button
               onClick={handleLogout}
-              className="text-lg font-semibold text-blue-500 bg-transparent"
+              className="text-xs font-semibold leading-none text-accent sm:text-sm"
             >
               Logout
             </button>
           )}
 
-          {/* <button
-            className={`bg-gray-700/60 p-2 rounded-full`}
+          <button
+            type="button"
+            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+            title={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
+            className="rounded-full p-1.5 transition-colors hover:bg-surface-raised sm:p-2"
             onClick={toggleTheme}
           >
             {theme === "light" ? (
-              <Moon className={`h-7 w-7`} />
+              <Moon className="h-5 w-5" />
             ) : (
-              <Sun className={`h-7 w-7`} />
+              <Sun className="h-5 w-5" />
             )}
-          </button> */}
-          <div className={`bg-gray-700/60 p-2 rounded-full`}>
-            <Bell className={`h-7 w-7`} />
-          </div>
-          <div className={`p-2 rounded-full bg-purple-900/80`}>
-            <User className={`h-7 w-7`} />
-          </div>
+          </button>
+          <NotificationBell />
+          <button
+            type="button"
+            onClick={() => navigate("/profile")}
+            className="rounded-full p-1.5 transition-colors hover:bg-surface-raised sm:p-2"
+            aria-label="Account settings"
+          >
+            <User className="h-5 w-5" />
+          </button>
         </div>
       </nav>
     </header>

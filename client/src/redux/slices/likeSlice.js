@@ -19,10 +19,10 @@ export const toggleVideoLike = createAsyncThunk(
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Failed to like the video")
+        extractErrorMessage(error, "Failed to like the video"),
       );
     }
-  }
+  },
 );
 
 export const toggleTweetLike = createAsyncThunk(
@@ -34,10 +34,10 @@ export const toggleTweetLike = createAsyncThunk(
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Failed to like the tweet")
+        extractErrorMessage(error, "Failed to like the tweet"),
       );
     }
-  }
+  },
 );
 
 //Toggle comment like
@@ -46,16 +46,16 @@ export const toggleCommentLike = createAsyncThunk(
   async (commentId, { rejectWithValue }) => {
     try {
       const response = await apiClient.post(
-        `/likes/toggle/channel/${commentId}`
+        `/likes/toggle/channel/${commentId}`,
       );
 
       return response?.data?.data;
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Failed to like the comment")
+        extractErrorMessage(error, "Failed to like the comment"),
       );
     }
-  }
+  },
 );
 
 //Get liked video
@@ -65,13 +65,13 @@ export const getLikedVideos = createAsyncThunk(
     try {
       const response = await apiClient.get("/likes/videos");
 
-      return response?.data?.data;
+      return response?.data?.data?.videos || [];
     } catch (error) {
       return rejectWithValue(
-        extractErrorMessage(error, "Failed to fetched all the videos")
+        extractErrorMessage(error, "Failed to fetched all the videos"),
       );
     }
-  }
+  },
 );
 
 const likeSlice = createSlice({

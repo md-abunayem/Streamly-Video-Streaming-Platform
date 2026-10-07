@@ -13,32 +13,29 @@ const PlaylistVideosPage = () => {
     if (playlistId) dispatch(getPlaylistById(playlistId));
   }, [playlistId, dispatch]);
 
-  if (loading) return <p className="text-white p-4">Loading...</p>;
-  if (!playlist) return <p className="text-white p-4">Playlist not found</p>;
+  if (loading) return <p className="p-4 text-text-muted">Loading...</p>;
+  if (!playlist)
+    return <p className="p-4 text-text-muted">Playlist not found</p>;
 
   return (
-    <div className="w-[100vw] min-h-auto mt-4 md:mt-0 p-4 md:p-8 flex flex-col lg:flex-row text-white justify-center lg:justify-start ">
+    <div className="mt-4 flex min-h-screen w-full flex-col justify-center p-4 text-text-primary md:mt-0 md:p-8 lg:flex-row lg:justify-start">
       {/* Info about playlist */}
-      <div
-        className={`w-full lg:w-[32%] lg:h-[80vh]  bg-gradient-to-b from-pink-900 via-purple-500 to-indigo-500 p-8 rounded-2xl lg:sticky lg:top-28`}
-      >
+      <div className="w-full rounded-lg border border-border bg-surface p-6 shadow-soft lg:sticky lg:top-20 lg:h-[80vh] lg:w-[32%]">
         <div className="w-full ">
           <img
             src={playlist?.videos[0]?.thumbnail}
             alt="video image"
-            className="w-full lg:max-h-56 md:max-h-65 rounded-2xl"
+            className="w-full rounded-md object-cover md:max-h-65 lg:max-h-56"
           />
         </div>
-        <p className="mt-4 lg:text-2xl font-bold text-gray-200 md:text-3xl">
-          {playlist.name}
-        </p>
+        <p className="mt-4 text-xl font-bold md:text-2xl">{playlist.name}</p>
         <div className="flex items-center my-2">
           <img
             src={playlist.owner.avatar}
             alt="owner"
             className="h-8 w-8 rounded-full mr-4"
           />{" "}
-          <p className="text-sm font-semibold">by {playlist.owner.fullName}</p>
+          <p className="text-sm font-semibold">by {playlist.owner?.fullName}</p>
         </div>
         <p>
           playlist • {playlist.totalVideos} videos • {playlist.totalViews} views
@@ -46,7 +43,7 @@ const PlaylistVideosPage = () => {
       </div>
 
       {/* videos of the playlist*/}
-      <div className="ml-3 flex-1 overflow-x-auto flex  flex-col justify-start gap-4 lg:pl-4 h-auto ">
+      <div className="flex h-auto flex-1 flex-col justify-start gap-4 overflow-x-auto lg:pl-4">
         {playlist &&
           playlist.videos.map((video) => (
             <PlaylistVideoCard video={video} key={video._id} />

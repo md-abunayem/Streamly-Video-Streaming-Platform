@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { ThumbsUp, EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 
-const CommentCard = ({ comment, onDeleteComment, onEditComment }) => {
+const CommentCard = ({
+  comment,
+  onDeleteComment,
+  onEditComment,
+  onLikeComment,
+}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleActions = () => {
@@ -9,7 +14,7 @@ const CommentCard = ({ comment, onDeleteComment, onEditComment }) => {
   };
 
   return (
-    <div className="mt-4 flex items-start justify-between bg-gray-800 rounded-md px-3 py-2">
+    <article className="mt-4 flex items-start justify-between gap-3 rounded-md border border-border bg-surface px-3 py-3 shadow-soft">
       {/* Profile & Comment */}
       <div>
         <div className="flex space-x-4">
@@ -22,14 +27,18 @@ const CommentCard = ({ comment, onDeleteComment, onEditComment }) => {
           </div>
 
           <div>
-            <p className="text-blue-400 font-semibold">
+            <p className="font-semibold text-accent">
               @{comment.owner.userName}
             </p>
-            <p className="text-gray-100">{comment.content}</p>
+            <p className="text-text-primary">{comment.content}</p>
           </div>
         </div>
-        <button type="button">
-          <ThumbsUp className="mt-2 ml-17"></ThumbsUp>
+        <button
+          type="button"
+          onClick={() => onLikeComment(comment)}
+          aria-label="Like comment"
+        >
+          <ThumbsUp className="ml-4 mt-2 text-text-muted" size={17} />
         </button>
       </div>
 
@@ -38,16 +47,16 @@ const CommentCard = ({ comment, onDeleteComment, onEditComment }) => {
         <button
           type="button"
           onClick={handleActions}
-          className="p-1 hover:bg-gray-600 rounded-full"
+          className="rounded-full p-1 text-text-muted hover:bg-surface-raised hover:text-text-primary"
         >
           <EllipsisVertical size={20} />
         </button>
 
         {isMenuOpen && (
-          <div className="absolute right-0 mt-2 w-32 bg-gray-800 border border-gray-700 rounded-md shadow-lg z-20">
+          <div className="absolute right-0 z-20 mt-2 w-32 rounded-md border border-border bg-surface-raised p-1 text-text-primary shadow-raised">
             <button
               type="button"
-              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-700 rounded-md text-gray-100"
+              className="flex w-full items-center gap-2 rounded px-3 py-2 text-left hover:bg-accent-soft"
               onClick={() => onEditComment(comment)}
             >
               <Pencil size={16} />
@@ -55,7 +64,7 @@ const CommentCard = ({ comment, onDeleteComment, onEditComment }) => {
             </button>
             <button
               type="button"
-              className="flex items-center gap-2 px-3 py-2 w-full hover:bg-gray-700 rounded-md text-red-400"
+              className="flex w-full items-center gap-2 rounded px-3 py-2 text-left text-red-700 hover:bg-red-50"
               onClick={() => onDeleteComment(comment)}
             >
               <Trash2 size={16} />
@@ -64,7 +73,7 @@ const CommentCard = ({ comment, onDeleteComment, onEditComment }) => {
           </div>
         )}
       </div>
-    </div>
+    </article>
   );
 };
 

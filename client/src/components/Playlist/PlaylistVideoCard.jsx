@@ -13,10 +13,12 @@ const PlaylistVideoCard = ({ video }) => {
         ></video>
       </Link>
       <div className="">
-        <p className="text-white text-2xl font-semibold">{video.title}</p>
-        <div className="flex text-gray-500">
-          <p className="text-gray-500 font-bold">{video.owner.fullName}</p>
-          <p className="mx-2"> • </p>
+        <p className="text-lg font-semibold text-text-primary sm:text-xl">
+          {video.title}
+        </p>
+        <div className="flex items-center text-sm text-text-muted">
+          <p className="font-semibold">{video.owner?.fullName}</p>
+          <p className="mx-2">·</p>
           <p>{calculateViews(video.views)}</p>
         </div>
       </div>
