@@ -34,7 +34,15 @@ Users can search and discover videos across the platform.
   <img src="./screenshots/search.png" alt="Streamly Video Search" width="900">
 </p>
 
-### 3. Channel Overview
+### 3. Video Details
+
+The video details page provides the complete video viewing experience, including video information and user interactions.
+
+<p align="center">
+  <img src="./screenshots/video_details_page.png" alt="Streamly Video Details Page" width="900">
+</p>
+
+### 4. Channel Overview
 
 Each channel has a dedicated page where users can explore channel information, content, and activity.
 
@@ -42,7 +50,7 @@ Each channel has a dedicated page where users can explore channel information, c
   <img src="./screenshots/channel_overview.png" alt="Streamly Channel Overview" width="900">
 </p>
 
-### 4. Channel
+### 5. Channel
 
 The channel interface organizes a creator's videos and provides users with access to channel-specific content.
 
@@ -50,7 +58,7 @@ The channel interface organizes a creator's videos and provides users with acces
   <img src="./screenshots/channel.png" alt="Streamly Channel" width="900">
 </p>
 
-### 5. Channel Playlists
+### 6. Channel Playlists
 
 Creators can organize videos into playlists, allowing viewers to browse related content efficiently.
 
@@ -58,7 +66,7 @@ Creators can organize videos into playlists, allowing viewers to browse related 
   <img src="./screenshots/channel_playlist.png" alt="Streamly Channel Playlists" width="900">
 </p>
 
-### 6. Channel Tweets
+### 7. Channel Tweets
 
 Channels can publish short updates and interact with their audience through the platform's social features.
 
@@ -66,7 +74,7 @@ Channels can publish short updates and interact with their audience through the 
   <img src="./screenshots/channel_tweet.png" alt="Streamly Channel Tweets" width="900">
 </p>
 
-### 7. Following Channels
+### 8. Following Channels
 
 Users can follow channels to keep track of their favorite creators and content.
 
@@ -74,7 +82,7 @@ Users can follow channels to keep track of their favorite creators and content.
   <img src="./screenshots/channel_following.png" alt="Streamly Following Channels" width="900">
 </p>
 
-### 8. Subscribers
+### 9. Subscribers
 
 The subscriber section provides creators with an overview of their audience.
 
@@ -82,7 +90,7 @@ The subscriber section provides creators with an overview of their audience.
   <img src="./screenshots/subscribers.png" alt="Streamly Subscribers" width="900">
 </p>
 
-### 9. Followers
+### 10. Followers
 
 Users can view and manage their followers through their profile.
 
@@ -90,7 +98,7 @@ Users can view and manage their followers through their profile.
   <img src="./screenshots/followers.png" alt="Streamly Followers" width="900">
 </p>
 
-### 10. Liked Videos
+### 11. Liked Videos
 
 Users can access videos they have previously liked.
 
@@ -98,7 +106,7 @@ Users can access videos they have previously liked.
   <img src="./screenshots/liked_videos_section.png" alt="Streamly Liked Videos" width="900">
 </p>
 
-### 11. Watch History
+### 12. Watch History
 
 The watch history section allows users to revisit previously watched videos.
 
@@ -106,7 +114,7 @@ The watch history section allows users to revisit previously watched videos.
   <img src="./screenshots/watch_history.png" alt="Streamly Watch History" width="900">
 </p>
 
-### 12. Notifications
+### 13. Notifications
 
 Users receive notifications for relevant platform and channel activity.
 
@@ -114,7 +122,7 @@ Users receive notifications for relevant platform and channel activity.
   <img src="./screenshots/notifications.png" alt="Streamly Notifications" width="900">
 </p>
 
-### 13. Video Upload
+### 14. Video Upload
 
 Creators can upload and publish videos through the dedicated upload interface.
 
@@ -122,7 +130,7 @@ Creators can upload and publish videos through the dedicated upload interface.
   <img src="./screenshots/upload_section.png" alt="Streamly Video Upload" width="900">
 </p>
 
-### 14. Sidebar Navigation
+### 15. Sidebar Navigation
 
 The sidebar provides quick access to the platform's primary features and content sections.
 
@@ -130,7 +138,7 @@ The sidebar provides quick access to the platform's primary features and content
   <img src="./screenshots/side_bar.png" alt="Streamly Sidebar Navigation" width="900">
 </p>
 
-### 15. Login
+### 16. Login
 
 Existing users can securely authenticate to access their Streamly account.
 
@@ -138,13 +146,14 @@ Existing users can securely authenticate to access their Streamly account.
   <img src="./screenshots/login%20page.png" alt="Streamly Login" width="700">
 </p>
 
-### 16. Registration
+### 17. Registration
 
 New users can create a Streamly account through the registration interface.
 
 <p align="center">
   <img src="./screenshots/register_page.png" alt="Streamly Registration" width="700">
 </p>
+
 
 
 ## 3. Key features
