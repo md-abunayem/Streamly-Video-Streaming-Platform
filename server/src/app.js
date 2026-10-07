@@ -5,11 +5,6 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 const allowedOrigins = [
-  "https://streamly-frontend-b2qd.onrender.com",
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://127.0.0.1:5173",
-  "http://127.0.0.1:5174",
   process.env.CORS_ORIGIN,
 ].filter(Boolean);
 
