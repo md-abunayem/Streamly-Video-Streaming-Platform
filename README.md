@@ -14,9 +14,9 @@ Streamly is a full-stack video platform for creators and viewers to upload, disc
 
 ## 2. Live demo & screenshots
 
-- Live demo: TODO — deploy the app and replace this with the production URL.
-- Frontend: TODO
-- Backend API: TODO
+- Live demo: https://streamly-jjg7.onrender.com
+- Frontend: https://streamly-jjg7.onrender.com
+- Backend API: https://streamly-backend-x2fx.onrender.com/api/v1
 
 ### 1. Home Dashboard
 
@@ -475,7 +475,6 @@ TODO: add Jest/Vitest or integration tests for auth, upload flows, subscriptions
 
 - LinkedIn: https://linkedin.com/in/md-abunayem
 - GitHub: https://github.com/md-abunayem
-- Portfolio: https://your-portfolio.com
 - Email: md.abunayem.cs@gmail.com
 
 This project demonstrates full-stack JavaScript development, secure API design, media handling, and modern front-end state management in a real-world content platform.
