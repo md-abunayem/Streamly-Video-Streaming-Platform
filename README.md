@@ -18,11 +18,134 @@ Streamly is a full-stack video platform for creators and viewers to upload, disc
 - Frontend: TODO
 - Backend API: TODO
 
-![Streamly Home Dashboard](./screenshots/Home%20(Dashboard).png)
+### 1. Home Dashboard
 
-![Streamly video detail placeholder](https://placehold.co/1280x720/111827/ffffff?text=Video+Detail+Page)
+The main Streamly dashboard provides personalized video discovery, navigation, and access to core platform features.
 
-![Streamly channel dashboard placeholder](https://placehold.co/1280x720/1f2937/ffffff?text=Channel+Dashboard)
+<p align="center">
+  <img src="./screenshots/Home%20(Dashboard).png" alt="Streamly Home Dashboard" width="900">
+</p>
+
+### 2. Video Search
+
+Users can search and discover videos across the platform.
+
+<p align="center">
+  <img src="./screenshots/search.png" alt="Streamly Video Search" width="900">
+</p>
+
+### 3. Channel Overview
+
+Each channel has a dedicated page where users can explore channel information, content, and activity.
+
+<p align="center">
+  <img src="./screenshots/channel_overview.png" alt="Streamly Channel Overview" width="900">
+</p>
+
+### 4. Channel
+
+The channel interface organizes a creator's videos and provides users with access to channel-specific content.
+
+<p align="center">
+  <img src="./screenshots/channel.png" alt="Streamly Channel" width="900">
+</p>
+
+### 5. Channel Playlists
+
+Creators can organize videos into playlists, allowing viewers to browse related content efficiently.
+
+<p align="center">
+  <img src="./screenshots/channel_playlist.png" alt="Streamly Channel Playlists" width="900">
+</p>
+
+### 6. Channel Tweets
+
+Channels can publish short updates and interact with their audience through the platform's social features.
+
+<p align="center">
+  <img src="./screenshots/channel_tweet.png" alt="Streamly Channel Tweets" width="900">
+</p>
+
+### 7. Following Channels
+
+Users can follow channels to keep track of their favorite creators and content.
+
+<p align="center">
+  <img src="./screenshots/channel_following.png" alt="Streamly Following Channels" width="900">
+</p>
+
+### 8. Subscribers
+
+The subscriber section provides creators with an overview of their audience.
+
+<p align="center">
+  <img src="./screenshots/subscribers.png" alt="Streamly Subscribers" width="900">
+</p>
+
+### 9. Followers
+
+Users can view and manage their followers through their profile.
+
+<p align="center">
+  <img src="./screenshots/followers.png" alt="Streamly Followers" width="900">
+</p>
+
+### 10. Liked Videos
+
+Users can access videos they have previously liked.
+
+<p align="center">
+  <img src="./screenshots/liked_videos_section.png" alt="Streamly Liked Videos" width="900">
+</p>
+
+### 11. Watch History
+
+The watch history section allows users to revisit previously watched videos.
+
+<p align="center">
+  <img src="./screenshots/watch_history.png" alt="Streamly Watch History" width="900">
+</p>
+
+### 12. Notifications
+
+Users receive notifications for relevant platform and channel activity.
+
+<p align="center">
+  <img src="./screenshots/notifications.png" alt="Streamly Notifications" width="900">
+</p>
+
+### 13. Video Upload
+
+Creators can upload and publish videos through the dedicated upload interface.
+
+<p align="center">
+  <img src="./screenshots/upload_section.png" alt="Streamly Video Upload" width="900">
+</p>
+
+### 14. Sidebar Navigation
+
+The sidebar provides quick access to the platform's primary features and content sections.
+
+<p align="center">
+  <img src="./screenshots/side_bar.png" alt="Streamly Sidebar Navigation" width="900">
+</p>
+
+### 15. Login
+
+Existing users can securely authenticate to access their Streamly account.
+
+<p align="center">
+  <img src="./screenshots/login%20page.png" alt="Streamly Login" width="700">
+</p>
+
+### 16. Registration
+
+New users can create a Streamly account through the registration interface.
+
+<p align="center">
+  <img src="./screenshots/register_page.png" alt="Streamly Registration" width="700">
+</p>
+
 
 ## 3. Key features
 
