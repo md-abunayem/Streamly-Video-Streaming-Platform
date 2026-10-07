@@ -18,7 +18,7 @@ Streamly is a full-stack video platform for creators and viewers to upload, disc
 - Frontend: TODO
 - Backend API: TODO
 
-![Streamly home dashboard placeholder](https://placehold.co/1280x720/0f172a/ffffff?text=Streamly+Home+Dashboard)
+![Streamly Home Dashboard](./screenshots/Home%20(Dashboard).png)
 
 ![Streamly video detail placeholder](https://placehold.co/1280x720/111827/ffffff?text=Video+Detail+Page)
 
@@ -341,10 +341,10 @@ TODO: add Jest/Vitest or integration tests for auth, upload flows, subscriptions
 
 ### Md. Abu Nayem
 
-- LinkedIn: https://www.linkedin.com/in/your-profile
-- GitHub: https://github.com/your-username
+- LinkedIn: https://linkedin.com/in/md-abunayem
+- GitHub: https://github.com/md-abunayem
 - Portfolio: https://your-portfolio.com
-- Email: TODO
+- Email: md.abunayem.cs@gmail.com
 
 This project demonstrates full-stack JavaScript development, secure API design, media handling, and modern front-end state management in a real-world content platform.
 
