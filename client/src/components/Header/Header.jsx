@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Menu, Moon, Sun, User, X } from "lucide-react";
 
 import { ThemeContext } from "../../context/ThemeContext";
+import logo from "../../assets/images/logo.png";
 import SearchBar from "./SearchBar";
 import { logoutUser, clearAuth } from "../../redux/slices/authSlice";
 import NotificationBell from "../Notifications/NotificationBell";
@@ -45,7 +46,7 @@ const Header = ({ isSidebarOpen, toggleSidebar }) => {
           </button>
 
           <div className="h-9 w-14 object-contain sm:w-20">
-            <img src="/src/assets/images/logo.png" alt="Streamly" />
+            <img src={logo} alt="Streamly" />
           </div>
         </div>
 

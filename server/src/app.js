@@ -1,21 +1,24 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { ApiError } from "./utils/ApiError.js";
 
 const app = express();
 
-const allowedOrigins = [
-  process.env.CORS_ORIGIN,
-  "http://localhost:5173",
-].filter(Boolean);
+const allowedOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) {
+        callback(null, false);
+      } else if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(new ApiError(403, "Origin not allowed by CORS"));
       }
     },
     credentials: true,
