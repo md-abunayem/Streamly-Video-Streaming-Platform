@@ -3,8 +3,6 @@ node_modules/
 **/node_modules/
 
 # Environment variables
-.env
-.env.*
 !.env.example
 
 # Build output
@@ -36,7 +34,6 @@ coverage/
 .eslintcache
 
 # IDE / Editors
-.vscode/
 .idea/
 *.swp
 *.swo
@@ -58,3 +55,4 @@ temp/
 # Database local files
 *.sqlite
 *.sqlite3
+config.bat
